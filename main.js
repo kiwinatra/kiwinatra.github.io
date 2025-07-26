@@ -8780,7 +8780,7 @@ n.n = function(e) {
                 })]
             })
         }
-        var x = n.p + "st/cartoon-compressed.png";
+        var x = n.p + "st/12.png";
 
         function C(e) {
             var t = e.id;
@@ -8818,7 +8818,7 @@ n.n = function(e) {
                     className: "mask",
                     children: (0, a.jsx)("img", {
                         className: "bg",
-                        src: "st/cartoon-compressed.png",
+                        src: "st/12.png",
                         alt: "girl-with-laptop"
                     })
                 })]
