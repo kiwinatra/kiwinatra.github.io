@@ -34,90 +34,82 @@
 </head>
 <body class="min-h-full bg-gray-50">
     <div class="container mx-auto px-4 py-12 max-w-3xl">
-        <!-- Header -->
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gradient mb-2">Text Share</h1>
-            <p class="text-gray-600">Create shareable links for any text content</p>
-        </header>
+        <!-- This content will be replaced if we're on a share page -->
+        <main id="app">
+            <!-- Default content (main page) -->
+            <header class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gradient mb-2">Text Share</h1>
+                <p class="text-gray-600">Create shareable links for any text content</p>
+            </header>
 
-        <!-- Main Content -->
-        <main id="app" class="bg-white rounded-xl shadow-md p-6">
-            <!-- Text Input -->
-            <div class="mb-6">
-                <label for="textInput" class="block text-sm font-medium text-gray-700 mb-2">Your Text</label>
-                <textarea 
-                    id="textInput" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
-                    rows="8" 
-                    placeholder="Enter the text you want to share..."></textarea>
-            </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <!-- Text Input -->
+                <div class="mb-6">
+                    <label for="textInput" class="block text-sm font-medium text-gray-700 mb-2">Your Text</label>
+                    <textarea 
+                        id="textInput" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent" 
+                        rows="8" 
+                        placeholder="Enter the text you want to share..."></textarea>
+                </div>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-3 mb-8">
-                <button 
-                    id="generateBtn"
-                    class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
-                    Generate Links
-                </button>
-                <button 
-                    id="copyBtn"
-                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
-                    Copy Text
-                </button>
-                <button 
-                    id="clearBtn"
-                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
-                    Clear
-                </button>
-            </div>
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <button 
+                        id="generateBtn"
+                        class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
+                        Generate Links
+                    </button>
+                    <button 
+                        id="copyBtn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                        Copy Text
+                    </button>
+                    <button 
+                        id="clearBtn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                        Clear
+                    </button>
+                </div>
 
-            <!-- Generated Links -->
-            <div id="linksSection" class="hidden">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Shareable Links</h2>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Direct Copy Link</label>
-                    <div class="flex">
-                        <input 
-                            id="copyLink" 
-                            type="text" 
-                            readonly 
-                            class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none">
-                        <button 
-                            id="copyLinkBtn"
-                            class="px-4 py-2 bg-secondary-500 text-white rounded-r-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
-                            Copy
-                        </button>
+                <!-- Generated Links -->
+                <div id="linksSection" class="hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Shareable Links</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Direct Copy Link</label>
+                        <div class="flex">
+                            <input 
+                                id="copyLink" 
+                                type="text" 
+                                readonly 
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none">
+                            <button 
+                                id="copyLinkBtn"
+                                class="px-4 py-2 bg-secondary-500 text-white rounded-r-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
+                                Copy
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">This link will automatically copy the text when opened</p>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">This link will automatically copy the text when opened</p>
-                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Shareable Page Link</label>
-                    <div class="flex">
-                        <input 
-                            id="pageLink" 
-                            type="text" 
-                            readonly 
-                            class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none">
-                        <button 
-                            id="copyPageLinkBtn"
-                            class="px-4 py-2 bg-secondary-500 text-white rounded-r-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
-                            Copy
-                        </button>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Shareable Page Link</label>
+                        <div class="flex">
+                            <input 
+                                id="pageLink" 
+                                type="text" 
+                                readonly 
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none">
+                            <button 
+                                id="copyPageLinkBtn"
+                                class="px-4 py-2 bg-secondary-500 text-white rounded-r-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
+                                Copy
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">This link will open a page where the text can be copied</p>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">This link will open a page where the text can be copied</p>
                 </div>
-            </div>
-
-            <!-- Liquid Template for Results (hidden) -->
-            <div  style="display: none;">
-                {% raw %}
-                <div class="mt-8 p-4 bg-blue-50 rounded-lg">
-                    <h3 class="font-medium text-blue-800">Your shared text:</h3>
-                    <p class="mt-2 text-blue-700">{{ content }}</p>
-                </div>
-                {% endraw %}
             </div>
         </main>
 
@@ -128,119 +120,144 @@
     </div>
 
     <script>
-        
+        // Initialize LiquidJS
+        const engine = new Liquid();
 
-        // DOM elements
-        const textInput = document.getElementById('textInput');
-        const generateBtn = document.getElementById('generateBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const copyLinkBtn = document.getElementById('copyLinkBtn');
-        const copyPageLinkBtn = document.getElementById('copyPageLinkBtn');
-        const linksSection = document.getElementById('linksSection');
-        const copyLinkInput = document.getElementById('copyLink');
-        const pageLinkInput = document.getElementById('pageLink');
-
-        // Event listeners
-        generateBtn.addEventListener('click', generateLinks);
-        copyBtn.addEventListener('click', copyText);
-        clearBtn.addEventListener('click', clearText);
-        copyLinkBtn.addEventListener('click', () => copyToClipboard(copyLinkInput));
-        copyPageLinkBtn.addEventListener('click', () => copyToClipboard(pageLinkInput));
-
-        // Check if this is a share page
+        // First check if this is a direct copy or share page
         if (window.location.search.includes('?id=')) {
-            // This is a direct copy link
-            const compressedText = window.location.search.split('?id=')[1];
-            const text = decodeURIComponent(atob(compressedText));
-            copyToClipboard(text, true);
-            window.close();
+            // Direct copy link - just copy and close
+            handleDirectCopyLink();
         } else if (window.location.search.includes('?page=')) {
-            // This is a share page
-            const compressedText = window.location.search.split('?page=')[1];
-            const text = decodeURIComponent(atob(compressedText));
-            
-            // Render the content using LiquidJS
-            const template = document.getElementById('template').innerHTML;
-            engine.parseAndRender(template, { content: text })
-                .then(html => {
-                    document.getElementById('app').innerHTML = `
-                        <div class="text-center mb-8">
-                            <h1 class="text-2xl font-bold text-primary-500 mb-2">Shared Text</h1>
-                            <p class="text-gray-600">Below is the shared text content</p>
-                        </div>
-                        ${html}
-                        <button 
-                            id="copySharedTextBtn"
-                            class="mt-4 w-full px-4 py-2 bg-secondary-500 text-white rounded-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
-                            Copy Text
-                        </button>
-                    `;
-                    document.getElementById('copySharedTextBtn').addEventListener('click', () => copyToClipboard(text, false, true));
+            // Share page - show the content
+            handleSharePage();
+        } else {
+            // Main page - setup event listeners
+            setupMainPage();
+        }
+
+        function handleDirectCopyLink() {
+            try {
+                const compressedText = window.location.search.split('?id=')[1];
+                const text = decodeURIComponent(atob(compressedText));
+                navigator.clipboard.writeText(text).then(() => {
+                    window.close();
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    window.close();
                 });
+            } catch (e) {
+                console.error('Error processing direct copy link:', e);
+                window.close();
+            }
         }
 
-        // Generate shareable links
-        function generateLinks() {
-            const text = textInput.value.trim();
-            if (!text) {
-                alert('Please enter some text first');
-                return;
+        async function handleSharePage() {
+            try {
+                const compressedText = window.location.search.split('?page=')[1];
+                const text = decodeURIComponent(atob(compressedText));
+                
+                const template = `
+                    <div class="text-center mb-8">
+                        <h1 class="text-2xl font-bold text-primary-500 mb-2">Shared Text</h1>
+                        <p class="text-gray-600">Below is the shared text content</p>
+                    </div>
+                    <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="font-medium text-blue-800">Your shared text:</h3>
+                        <p class="mt-2 text-blue-700">${text}</p>
+                    </div>
+                    <button 
+                        id="copySharedTextBtn"
+                        class="mt-4 w-full px-4 py-2 bg-secondary-500 text-white rounded-md hover:bg-secondary-600 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 transition-colors">
+                        Copy Text
+                    </button>
+                `;
+
+                document.getElementById('app').innerHTML = template;
+                document.getElementById('copySharedTextBtn').addEventListener('click', () => {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('Copied to clipboard!');
+                    }).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        showToast('Failed to copy', true);
+                    });
+                });
+            } catch (e) {
+                console.error('Error processing share page:', e);
+                document.getElementById('app').innerHTML = `
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <h2 class="text-xl font-semibold text-red-600 mb-4">Error</h2>
+                        <p class="text-gray-700">Could not load the shared content. The link may be invalid.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function setupMainPage() {
+            // DOM elements
+            const textInput = document.getElementById('textInput');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyLinkBtn = document.getElementById('copyLinkBtn');
+            const copyPageLinkBtn = document.getElementById('copyPageLinkBtn');
+            const linksSection = document.getElementById('linksSection');
+            const copyLinkInput = document.getElementById('copyLink');
+            const pageLinkInput = document.getElementById('pageLink');
+
+            // Event listeners
+            generateBtn.addEventListener('click', generateLinks);
+            copyBtn.addEventListener('click', copyText);
+            clearBtn.addEventListener('click', clearText);
+            copyLinkBtn.addEventListener('click', () => copyToClipboard(copyLinkInput));
+            copyPageLinkBtn.addEventListener('click', () => copyToClipboard(pageLinkInput));
+
+            function generateLinks() {
+                const text = textInput.value.trim();
+                if (!text) {
+                    alert('Please enter some text first');
+                    return;
+                }
+
+                // Compress text using Base64 encoding
+                const compressedText = btoa(encodeURIComponent(text));
+                const baseUrl = window.location.href.split('?')[0];
+                
+                copyLinkInput.value = `${baseUrl}?id=${compressedText}`;
+                pageLinkInput.value = `${baseUrl}?page=${compressedText}`;
+                linksSection.classList.remove('hidden');
             }
 
-            // Compress text using Base64 encoding
-            const compressedText = btoa(encodeURIComponent(text));
-            const baseUrl = window.location.href.split('?')[0];
-            
-            copyLinkInput.value = `${baseUrl}?id=${compressedText}`;
-            pageLinkInput.value = `${baseUrl}?page=${compressedText}`;
-            linksSection.classList.remove('hidden');
-        }
-
-        // Copy text to clipboard
-        function copyText() {
-            const text = textInput.value;
-            if (!text) {
-                alert('Nothing to copy');
-                return;
-            }
-            copyToClipboard(text);
-        }
-
-        // Clear the text area
-        function clearText() {
-            textInput.value = '';
-            linksSection.classList.add('hidden');
-        }
-
-        // Generic copy to clipboard function
-        function copyToClipboard(elementOrText, closeWindow = false, isText = false) {
-            let textToCopy;
-            if (isText) {
-                textToCopy = elementOrText;
-            } else {
-                const element = typeof elementOrText === 'string' 
-                    ? document.getElementById(elementOrText) 
-                    : elementOrText;
-                textToCopy = element.value || element.textContent;
+            function copyText() {
+                const text = textInput.value;
+                if (!text) {
+                    alert('Nothing to copy');
+                    return;
+                }
+                copyToClipboard(text);
             }
 
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                if (!closeWindow) {
+            function clearText() {
+                textInput.value = '';
+                linksSection.classList.add('hidden');
+            }
+
+            function copyToClipboard(elementOrText, isText = false) {
+                let textToCopy;
+                if (isText) {
+                    textToCopy = elementOrText;
+                } else {
+                    textToCopy = elementOrText.value || elementOrText.textContent;
+                }
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
                     showToast('Copied to clipboard!');
-                }
-                if (closeWindow) {
-                    setTimeout(() => window.close(), 100);
-                }
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                if (!closeWindow) {
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
                     showToast('Failed to copy', true);
-                }
-            });
+                });
+            }
         }
 
-        // Show toast notification
         function showToast(message, isError = false) {
             const toast = document.createElement('div');
             toast.className = `fixed bottom-4 right-4 px-4 py-2 rounded-md shadow-lg text-white ${
