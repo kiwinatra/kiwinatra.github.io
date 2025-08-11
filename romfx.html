@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RomKitter - MAX Tweaker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        @media (max-width: 640px) {
+            .mobile-stack {
+                flex-direction: column;
+            }
+            
+            .mobile-full {
+                width: 100%;
+            }
+            
+            .mobile-px-4 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .mobile-text-center {
+                text-align: center;
+            }
+        }
+        .recommended-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            background: rgba(79, 70, 229, 0.3); /* Полупрозрачный индиго */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .recommended-badge::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                rgba(99, 102, 241, 0.2) 0%,
+                rgba(79, 70, 229, 0.4) 50%,
+                rgba(99, 102, 241, 0.2) 100%
+            );
+            z-index: -1;
+            animation: rotate 6s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .recommended-badge::after {
+            content: '★';
+            margin-left: 0.25rem;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-md">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold gradient-text mb-1">RomKitter</h1>
+            <p class="text-sm text-slate-400">MAX Tweaker by potemkin</p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="card-glass rounded-xl p-6 mb-6">
+            <!-- Download Buttons -->
+            <div class="flex mobile-stack gap-3 mb-6">
+                <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg flex-1 transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Загрузить
+                </button>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-lg flex-1 transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Экспорт
+                </button>
+            </div>
+
+            <!-- Version Info -->
+            <div class="text-center mb-6">
+                <p class="text-sm text-slate-400">Версия: <span class="text-indigo-400">1.4.3</span></p>
+                <p class="text-sm text-slate-400">Размер: 157 MB</p>
+            </div>
+
+            <!-- Warning -->
+            <div class="bg-amber-900/30 border border-amber-800 rounded-lg p-3 mb-6">
+                <p class="text-xs text-amber-200">
+                    <span class="font-bold">Внимание:</span> Для работы некоторых функций требуются установка NuGet 
+                    <h6 align="center " class="font-bold" hidden>У вас установлен NuGet   </h6>
+                </p>
+            </div>
+
+            <!-- Toggles -->
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50">
+                    <span class="text-sm">Отключить просмотр пакетов</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50">
+                    <span class="text-sm">Выключить API</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50">
+                    <span class="text-sm">Выключить rootkit</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Config -->
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-slate-300 mb-2">Config</h3>
+                <div class="bg-slate-700 rounded-lg p-3 overflow-x-auto">
+                    <pre class="text-xs text-green-400 font-mono">ports: potemk.in/portwss/orgmax
+timeout: 3000
+debug: false
+cache_size: 256
+log_level: warn</pre>
+                </div>
+            </div>
+
+            
+            <!-- Advanced Settings for oneme.com.ru -->
+<div class="mb-6">
+    <h3 class="text-sm font-semibold text-slate-300 mb-3 flex items-center justify-between">
+        <span>oneme.com.ru Пакет</span>
+        <span class="text-xs bg-purple-900/50 text-purple-300 px-2 py-1 rounded">v3.4.2</span>
+    </h3>
+    
+    <div class="space-y-3">
+        <!-- Network Section -->
+        <div class="bg-slate-800/50 rounded-lg p-3">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-slate-200">Сетевые настройки</h4>
+                <span class="text-xs text-green-400">Активен</span>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2">
+                <div class="flex items-center justify-between p-2 rounded bg-slate-800/30">
+                    <span class="text-xs">Turbo UDP</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-2 rounded bg-slate-800/30">
+                    <span class="text-xs">Quantum TLS</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-2 rounded bg-slate-800/30">
+                    <span class="text-xs">Port Hopping</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-2 rounded bg-slate-800/30">
+                    <span class="text-xs">IPv6 Tunnel</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="bg-slate-800/50 rounded-lg p-3">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-slate-200">Безопасность</h4>
+                <span class="text-xs text-amber-400">Уровень 3</span>
+            </div>
+            
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">Шифрование</span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>AES-128</option>
+                        <option selected>ChaCha20</option>
+                        <option>Quantum-X</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">Handshake</span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>Standard</option>
+                        <option selected>Ephemeral</option>
+                        <option>Stealth</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">Kill Switch</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+           <!-- Security Section -->
+           <span class="recommended-badge">рекомендуется</span> 
+           <div class="bg-slate-800/50 rounded-lg p-3">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-slate-200">Безопасность</h4>
+                <span class="text-xs text-amber-400">FPSC</span>
+            </div>
+            
+                
+                
+            
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">API</span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>potemk.in (Y)</option>
+                        <option selected>eagltek.com (EAG)</option>
+                        <option>userapi.com (VK)</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">API qualify   </span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>Standard</option>
+                        <option selected>Ephemeral</option>
+                        <option>Stealth</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">Kill process</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Section -->
+        <div class="bg-slate-800/50 rounded-lg p-3">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-slate-200">Экспертные настройки</h4>
+                <span class="text-xs text-red-400">Только для DEV</span>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs block">MTU Size</span>
+                        <span class="text-xs text-slate-500">1420-1500</span>
+                    </div>
+                    <input type="number" value="1450" class="bg-slate-800 w-16 text-xs p-1 rounded border border-slate-700">
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs block">Packet Loss</span>
+                        <span class="text-xs text-slate-500">0-5%</span>
+                    </div>
+                    <input type="range" min="0" max="5" value="2" class="w-24 accent-purple-600">
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">DNS Mode</span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>System</option>
+                        <option selected>Secure</option>
+                        <option>Tor</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-xs">Obfuscation</span>
+                    <select class="bg-slate-800 text-xs p-1 rounded border border-slate-700">
+                        <option>None</option>
+                        <option selected>Basic</option>
+                        <option>Ultra</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Config -->
+        <div class="bg-slate-800/50 rounded-lg p-3">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-medium text-slate-200">Кастомный конфиг</h4>
+                <button class="text-xs bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded transition">Import</button>
+            </div>
+            
+            <textarea class="w-full bg-slate-900 text-xs text-green-400 font-mono p-2 rounded border border-slate-700 h-24 resize-none" spellcheck="false">
+# oneme.com.ru advanced config
+protocol: stealth
+encryption: chacha20-ietf
+obfs: tls1.2_ticket_auth
+server_port: 443
+server: oneme.com.ru
+timeout: 300
+fast_open: true
+            </textarea>
+            
+            <div class="flex justify-end gap-2 mt-2">
+                <button class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded transition">Validate</button>
+                <button class="text-xs bg-purple-700 hover:bg-purple-600 px-3 py-1 rounded transition">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- Rooter -->
+            <div>
+                <h3 class="text-sm font-semibold text-slate-300 mb-2">Rooter</h3>
+                <div class="space-y-3">
+                    <div class="flex mobile-stack gap-2">
+                        <input type="text" placeholder="Введите команду" class="bg-slate-800/50 border border-slate-700 text-sm rounded-lg p-2 flex-grow focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-3 rounded-lg text-sm transition whitespace-nowrap">
+                            Add root shaw
+                        </button>
+                    </div>
+                    <div class="flex mobile-stack gap-2">
+                        <input type="text" placeholder="Имя пакета" class="bg-slate-800/50 border border-slate-700 text-sm rounded-lg p-2 flex-grow focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <button class="bg-rose-600 hover:bg-rose-700 text-white py-2 px-3 rounded-lg text-sm transition whitespace-nowrap">
+                            Disable
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-500 mt-8">
+            <p>© 2023 RomKitter | made for Zlata</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="jsonModal" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 hidden">
+        <div class="card-glass rounded-xl p-6 max-w-sm w-full">
+            <h3 class="font-semibold mb-3">Загрузка конфигурации</h3>
+            <div class="w-full bg-slate-700 rounded-full h-2 mb-3">
+                <div class="bg-indigo-600 h-2 rounded-full" style="width: 45%"></div>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Ошибка: undefined</p>
+            <button onclick="document.getElementById('jsonModal').classList.add('hidden')" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg text-sm transition">
+                Отмена
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Button functionality
+        document.querySelectorAll('button')[0].addEventListener('click', function() {
+            document.getElementById('jsonModal').classList.remove('hidden');
+        });
+        
+        document.querySelectorAll('button')[1].addEventListener('click', function() {
+            alert('Экспорт куста завершен!');
+        });
+    </script>
+</body>
+</html>
