@@ -1,79 +1,201 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charSet="utf-8" data-next-head="" />
-    <meta name="viewport" content="width=device-width" data-next-head="" />
-    <title data-next-head="">404: This page could not be found</title>
-    <link rel="preload" href="/_next/static/media/9c18eba18d4baf22.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="" />
-    <link rel="preload" href="/_next/static/css/3c1c45f5dc4e5354.css" as="style" />
-    <link rel="stylesheet" href="/_next/static/css/3c1c45f5dc4e5354.css" data-n-g="" />
-    <noscript data-n-css=""></noscript>
-    <script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script>
-    <script src="/_next/static/chunks/webpack-bad5db195c188c77.js" defer=""></script>
-    <script src="/_next/static/chunks/framework-5757d75364ce2279.js" defer=""></script>
-    <script src="/_next/static/chunks/main-2308164dd65847e4.js" defer=""></script>
-    <script src="/_next/static/chunks/pages/_app-2672b16c4af0def5.js" defer=""></script>
-    <script src="/_next/static/chunks/pages/_error-e15c84159987e7e6.js" defer=""></script>
-    <script src="/_next/static/Y_nokyxikAobDOLbOeP99/_buildManifest.js" defer=""></script>
-    <script src="/_next/static/Y_nokyxikAobDOLbOeP99/_ssgManifest.js" defer=""></script>
-    <style id="__jsx-1974165307">
-      :root {
-        --font-dm-sans: 'DM Sans'
-      }
+<!-- <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Not Found | Cosmic Adventure</title>
+    <link rel="stylesheet" href="3c1c45f5dc4e5354.css">
+    <link rel="stylesheet" href="6421b042ef229f27.css">
+    <style>
+        /* Дополнительные стили для игры */
+        .game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -10;
+            overflow: hidden;
+        }
+        
+        .cosmic-ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+            border-radius: 50%;
+            pointer-events: auto;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(132, 134, 255, 0.6);
+            transition: transform 0.1s ease;
+            z-index: -5;
+        }
+        
+        .cosmic-ball:hover {
+            transform: scale(1.2);
+        }
+        
+        .score-display {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            font-size: 1.25rem;
+            color: hsl(var(--foreground));
+            background: hsl(var(--background)/0.7);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            backdrop-filter: blur(8px);
+            z-index: 40;
+        }
+        
+        /* Анимация для 404 текста */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
     </style>
-  </head>
-  <body>
-    <div id="__next">
-      <div lang="en" class="jsx-1974165307 __className_09c922">
-        <div style="font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <div style="line-height:48px">
-            <style>
-              body {
-                color: #000;
-                background: #fff;
-                margin: 0
-              }
+</head>
+<body class="bg-background text-foreground">
+   
+    <div class="game-container" id="gameContainer"></div>
+    <div class="score-display" id="scoreDisplay">Score: 0</div>
 
-              .next-error-h1 {
-                border-right: 1px solid rgba(0, 0, 0, .3)
-              }
-
-              @media (prefers-color-scheme:dark) {
-                body {
-                  color: #fff;
-                  background: #000
-                }
-
-                .next-error-h1 {
-                  border-right: 1px solid rgba(255, 255, 255, .3)
-                }
-              }
-            </style>
-            <h1 class="next-error-h1" style="display:inline-block;margin:0 20px 0 0;padding-right:23px;font-size:24px;font-weight:500;vertical-align:top">404</h1>
-            <div style="display:inline-block">
-              <h2 style="font-size:14px;font-weight:400;line-height:28px">This page could not be found
-                <!-- -->.
-              </h2>
+   
+    <div class="container mx-auto px-6 py-24 flex flex-col items-center justify-center min-h-screen">
+        <div class="text-center space-y-8 max-w-2xl relative z-10">
+            <div class="animate-float">
+                <h1 class="text-6xl xl:text-8xl font-semibold text-gradient">404</h1>
             </div>
-          </div>
+            
+            <h2 class="text-3xl xl:text-4xl font-medium">Lost in Cosmic Space</h2>
+            
+            <p class="text-lg xl:text-xl text-muted-foreground">
+                The page you're looking for has been sucked into a black hole. 
+                But don't worry! You can play with these cosmic energy balls while we redirect you.
+            </p>
+            
+            <div class="pt-6 space-x-4">
+                <a href="/" class="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-full font-medium transition-all hover:-translate-y-0.5">
+                    Return Home
+                </a>
+                <a href="#" id="restartGame" class="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-8 py-3 rounded-full font-medium transition-all hover:-translate-y-0.5">
+                    Restart Game
+                </a>
+            </div>
         </div>
-      </div>
     </div>
-    <script id="__NEXT_DATA__" type="application/json">
-      {
-        "props": {
-          "pageProps": {
-            "statusCode": 404
-          }
-        },
-        "page": "/_error",
-        "query": {},
-        "buildId": "Y_nokyxikAobDOLbOeP99",
-        "nextExport": true,
-        "isFallback": false,
-        "gip": true,
-        "scriptLoader": []
-      }
+
+    <script>
+        // Мини-игра "Поймай шарики"
+        const gameContainer = document.getElementById('gameContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const restartBtn = document.getElementById('restartGame');
+        
+        let score = 0;
+        let balls = [];
+        let gameInterval;
+        
+        // Создаем шарики
+        function createBall() {
+            const ball = document.createElement('div');
+            ball.className = 'cosmic-ball';
+            
+            // Случайная позиция
+            const size = Math.random() * 20 + 20;
+            const x = Math.random() * (window.innerWidth - size);
+            const y = Math.random() * (window.innerHeight - size);
+            
+            ball.style.width = `${size}px`;
+            ball.style.height = `${size}px`;
+            ball.style.left = `${x}px`;
+            ball.style.top = `${y}px`;
+            
+            // Случайная скорость
+            const speedX = (Math.random() - 0.5) * 4;
+            const speedY = (Math.random() - 0.5) * 4;
+            
+            ball.dataset.speedX = speedX;
+            ball.dataset.speedY = speedY;
+            
+            // Клик по шарику
+            ball.addEventListener('click', () => {
+                score += Math.round(size);
+                scoreDisplay.textContent = `Score: ${score}`;
+                
+                // Эффект взрыва
+                ball.style.transform = 'scale(2)';
+                ball.style.opacity = '0';
+                setTimeout(() => {
+                    gameContainer.removeChild(ball);
+                    balls = balls.filter(b => b !== ball);
+                }, 200);
+            });
+            
+            gameContainer.appendChild(ball);
+            balls.push(ball);
+        }
+        
+        // Движение шариков
+        function moveBalls() {
+            balls.forEach(ball => {
+                const speedX = parseFloat(ball.dataset.speedX);
+                const speedY = parseFloat(ball.dataset.speedY);
+                
+                const rect = ball.getBoundingClientRect();
+                let newX = rect.left + speedX;
+                let newY = rect.top + speedY;
+                
+                // Отскок от границ
+                if (newX <= 0 || newX + rect.width >= window.innerWidth) {
+                    ball.dataset.speedX = -speedX;
+                }
+                
+                if (newY <= 0 || newY + rect.height >= window.innerHeight) {
+                    ball.dataset.speedY = -speedY;
+                }
+                
+                ball.style.left = `${newX}px`;
+                ball.style.top = `${newY}px`;
+            });
+        }
+        
+        // Начало игры
+        function startGame() {
+            // Очищаем предыдущую игру
+            balls.forEach(ball => gameContainer.removeChild(ball));
+            balls = [];
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            
+            // Создаем 15 шариков
+            for (let i = 0; i < 15; i++) {
+                createBall();
+            }
+            
+            // Запускаем движение
+            clearInterval(gameInterval);
+            gameInterval = setInterval(moveBalls, 20);
+        }
+        
+        // Перезапуск игры
+        restartBtn.addEventListener('click', startGame);
+        
+        // Запускаем игру при загрузке
+        window.addEventListener('load', startGame);
+        
+        // Добавляем новый шарик каждые 3 секунды
+        setInterval(() => {
+            if (balls.length < 25) {
+                createBall();
+            }
+        }, 3000);
+        
+        // Анимация плавающего текста
+        const floatElements = document.querySelectorAll('.animate-float');
+        floatElements.forEach(el => {
+            el.style.animation = 'float 6s ease-in-out infinite';
+        });
     </script>
-  </body>
-</html>
+</body>
+</html> -->
