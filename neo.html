@@ -1,0 +1,2410 @@
+
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoBank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #7e57c2;
+            --primary-dark: #4527a0;
+            --secondary: #26a69a;
+            --error: #ef5350;
+            --success: #66bb6a;
+            --warning: #ffa726;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --primary: #7e57c2;
+            --primary-light: #9575cd;
+            --primary-dark: #5e35b1;
+            --secondary: #26c6da;
+            --error: #f44336;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --text-primary: #f8f9fa;
+            --text-secondary: #e9ecef;
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-card: #1e1e1e;
+            --border-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(94, 53, 177, 0.1);
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .main {
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .balance-details {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .balance-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .balance-detail-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .balance-detail-value {
+            font-weight: 600;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            background-color: rgba(94, 53, 177, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .quick-action-label {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .cards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .bank-card {
+            background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bank-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+
+        .bank-card-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .bank-card-secondary {
+            background: linear-gradient(135deg, var(--secondary), #00897b);
+        }
+
+        .card-chip {
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border-radius: 5px;
+        }
+
+        .card-number {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-detail-label {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .card-detail-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .card-logo {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .transactions {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transactions td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction {
+            transition: background-color 0.2s;
+        }
+
+        .transaction:hover {
+            background-color: rgba(94, 53, 177, 0.05);
+        }
+
+        .transaction-category {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .transaction-category-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(94, 53, 177, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .transaction-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .transaction-name {
+            font-weight: 500;
+        }
+
+        .transaction-date {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .transaction-amount.income {
+            color: var(--success);
+        }
+
+        .transaction-amount.expense {
+            color: var(--error);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .select {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            min-width: 150px;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(94, 53, 177, 0.2);
+        }
+
+        .form-error {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .form-control.error:focus {
+            box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .radio-label {
+            font-size: 0.875rem;
+        }
+
+        .tariff-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tariff-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tariff-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tariff-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(94, 53, 177, 0.05);
+        }
+
+        .tariff-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tariff-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .tariff-features {
+            list-style-type: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .tariff-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .tariff-feature i {
+            color: var(--success);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .sms-code-input {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .sms-code-input input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .sms-code-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(94, 53, 177, 0.2);
+        }
+
+        .transfer-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .transfer-success {
+            color: var(--success);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skeleton {
+            background-color: var(--border-color);
+            border-radius: 4px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .skeleton-text {
+            height: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text:last-child {
+            margin-bottom: 0;
+            width: 80%;
+        }
+
+        .skeleton-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .language-switcher {
+            position: relative;
+        }
+
+        .language-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 0;
+            min-width: 120px;
+            z-index: 10;
+            display: none;
+            border: 1px solid var(--border-color);
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-option:hover {
+            background-color: rgba(94, 53, 177, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: var(--bg-card);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .mobile-nav-link.active {
+            background-color: rgba(94, 53, 177, 0.1);
+            color: var(--primary);
+        }
+
+        .mobile-menu-footer {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .nav, .header-actions .btn:not(.btn-icon) {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+
+            .balance-details {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .transactions th, .transactions td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .transaction-category-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-input {
+                max-width: 100%;
+            }
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 350px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--error);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast-error .toast-icon {
+            color: var(--error);
+        }
+
+        .toast-content {
+            flex-grow: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-message {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+        .transfer-success-animation {
+    text-align: center;
+    padding: 2rem;
+}
+
+.checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+}
+
+.checkmark__circle {
+    stroke: #4CAF50;
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke: #4CAF50;
+    stroke-width: 2;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+.transfer-title {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.transfer-amount {
+    font-size: 2.5rem;
+    color: #2E7D32;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.currency {
+    font-size: 1.2rem;
+    margin-right: 2px;
+    margin-top: 5px;
+}
+
+.amount {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.cents {
+    font-size: 1.2rem;
+    margin-top: 5px;
+}
+
+.transfer-info {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #3d8b40;
+}
+    </style>
+</head>
+<body>
+    <script>
+        // Анимация появления элементов
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.transfer-title, .transfer-amount, .info-row');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 500 + (index * 100));
+            });
+        });
+        </script>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" data-page="home">
+                <i data-lucide="wallet"></i>
+                <span>NeoBank</span>
+            </a>
+
+            <nav class="nav">
+                <a href="#" class="nav-link active" data-page="home">
+                    <span data-i18n="home">Главная</span>
+                </a>
+                <a href="#" class="nav-link" data-page="transactions">
+                    <span data-i18n="transactions">Операции</span>
+                </a>
+                <a href="#" class="nav-link" data-page="new-account">
+                    <span data-i18n="new_account">Счета</span>
+                </a>
+                <a href="#" class="nav-link" data-page="transfer">
+                    <span data-i18n="transfer">Перевод</span>
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="btn btn-icon" id="theme-toggle">
+                    <i data-lucide="sun"></i>
+                </button>
+
+                <div class="language-switcher">
+                    <button class="language-btn" id="language-btn">
+                        <span id="current-language">RU</span>
+                        <i data-lucide="chevron-down"></i>
+                    </button>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <div class="language-option" data-lang="ru">
+                            <span>Русский</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <span>English</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-icon mobile-menu-btn" id="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-header">
+            <div class="logo" data-page="home">
+                <i data-lucide="wallet"></i>
+                <span>NeoBank</span>
+            </div>
+            <button class="mobile-menu-close" id="mobile-menu-close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+        <nav class=" mobile-nav">
+            <a href="#" class="mobile-nav-link active" data-page="home">
+                <span data-i18n="home">Главная</span>
+            </a>
+            <a href="#" class="mobile-nav-link" data-page="transactions">
+                <span data-i18n="transactions">Операции</span>
+            </a>
+            <a href="#" class="mobile-nav-link" data-page="new-account">
+                <span data-i18n="new_account">Счета</span>
+            </a>
+            <a href="#" class="mobile-nav-link" data-page="transfer">
+                <span data-i18n="transfer">Перевод</span>
+            </a>
+        </nav>
+
+        <div class="mobile-menu-footer">
+            <button class="btn btn-outline" id="mobile-theme-toggle">
+                <i data-lucide="sun"></i>
+                <span data-i18n="toggle_theme">Сменить тему</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+        <div class="container">
+            <!-- Home Page -->
+            <div class="page" id="home-page">
+                <h1 class="page-title" data-i18n="overview">Обзор</h1>
+
+                <div class="card balance-card">
+                    <div class="card-header">
+                        <h2 class="card-title" data-i18n="total_balance">Общий баланс</h2>
+                        <button class="btn btn-icon" style="background-color: rgba(255, 255, 255, 0.2); color: white;">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                    <div class="balance-amount">$24,560.50</div>
+                    <div class="balance-details">
+                        <div class="balance-detail-item">
+                            <span class="balance-detail-label" data-i18n="income">Доход</span>
+                            <span class="balance-detail-value">$5,230.00</span>
+                        </div>
+                        <div class="balance-detail-item">
+                            <span class="balance-detail-label" data-i18n="expenses">Расход</span>
+                            <span class="balance-detail-value">$2,450.75</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="#" class="quick-action" data-page="transfer">
+                        <div class="quick-action-icon">
+                            <i data-lucide="send"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="transfer">Перевод</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <div class="quick-action-icon">
+                            <i data-lucide="smartphone"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="mobile_topup">Пополнение телефона</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <div class="quick-action-icon">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="payments">Платежи</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <div class="quick-action-icon">
+                            <i data-lucide="shopping-cart"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="shopping">Покупки</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <div class="quick-action-icon">
+                            <i data-lucide="dollar-sign"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="exchange">Обмен</span>
+                    </a>
+                    <a href="#" class="quick-action">
+                        <div class="quick-action-icon">
+                            <i data-lucide="plus"></i>
+                        </div>
+                        <span class="quick-action-label" data-i18n="more">Ещё</span>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title" data-i18n="my_cards">Мои карты</h2>
+                        <button class="btn btn-outline btn-sm" data-i18n="add_card">+ Добавить карту</button>
+                    </div>
+                    <div class="cards-list">
+                        <div class="bank-card bank-card-primary">
+                            <div class="card-logo">VISA</div>
+                            <div class="card-chip"></div>
+                            <div class="card-number">•••• •••• •••• 4679</div>
+                            <div class="card-details">
+                                <div class="card-detail-item">
+                                    <span class="card-detail-label" data-i18n="card_holder">Владелец</span>
+                                    <span class="card-detail-value">IVAN PETROV</span>
+                                </div>
+                                <div class="card-detail-item">
+                                    <span class="card-detail-label" data-i18n="expires">Срок</span>
+                                    <span class="card-detail-value">09/25</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bank-card bank-card-secondary">
+                            <div class="card-logo">MC</div>
+                            <div class="card-chip"></div>
+                            <div class="card-number">•••• •••• •••• 9821</div>
+                            <div class="card-details">
+                                <div class="card-detail-item">
+                                    <span class="card-detail-label" data-i18n="card_holder">Владелец</span>
+                                    <span class="card-detail-value">IVAN PETROV</span>
+                                </div>
+                                <div class="card-detail-item">
+                                    <span class="card-detail-label" data-i18n="expires">Срок</span>
+                                    <span class="card-detail-value">12/26</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title" data-i18n="recent_transactions">Последние операции</h2>
+                        <a href="#" class="btn btn-outline btn-sm" data-page="transactions" data-i18n="view_all">Все операции</a>
+                    </div>
+                    <table class="transactions">
+                        <thead>
+                            <tr>
+                                <th data-i18n="transaction">Операция</th>
+                                <th data-i18n="date">Дата</th>
+                                <th data-i18n="amount">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="transaction">
+                                <td>
+                                    <div class="transaction-category">
+                                        <div class="transaction-category-icon">
+                                            <i data-lucide="shopping-bag"></i>
+                                        </div>
+                                        <div class="transaction-info">
+                                            <span class="transaction-name">Amazon</span>
+                                            <span class="transaction-date" data-i18n="card_payment">Оплата картой</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Сегодня, 14:30</td>
+                                <td class="transaction-amount expense">-$129.99</td>
+                            </tr>
+                            <tr class="transaction">
+                                <td>
+                                    <div class="transaction-category">
+                                        <div class="transaction-category-icon">
+                                            <i data-lucide="dollar-sign"></i>
+                                        </div>
+                                        <div class="transaction-info">
+                                            <span class="transaction-name">Salary</span>
+                                            <span class="transaction-date" data-i18n="income">Доход</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Вчера, 09:15</td>
+                                <td class="transaction-amount income">+$3,450.00</td>
+                            </tr>
+                            <tr class="transaction">
+                                <td>
+                                    <div class="transaction-category">
+                                        <div class="transaction-category-icon">
+                                            <i data-lucide="coffee"></i>
+                                        </div>
+                                        <div class="transaction-info">
+                                            <span class="transaction-name">Starbucks</span>
+                                            <span class="transaction-date" data-i18n="card_payment">Оплата картой</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Вчера, 08:45</td>
+                                <td class="transaction-amount expense">-$5.75</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transactions Page -->
+            <div class="page" id="transactions-page" style="display: none;">
+                <h1 class="page-title" data-i18n="transactions">Операции</h1>
+
+                <div class="card">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label class="filter-label" data-i18n="period">Период</label>
+                            <select class="select" id="period-select">
+                                <option value="all" data-i18n="all_time">За всё время</option>
+                                <option value="today" data-i18n="today">Сегодня</option>
+                                <option value="week" data-i18n="this_week">На этой неделе</option>
+                                <option value="month" selected data-i18n="this_month">В этом месяце</option>
+                                <option value="year" data-i18n="this_year">В этом году</option>
+                                <option value="custom" data-i18n="custom">Выбрать период</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label" data-i18n="type">Тип</label>
+                            <select class="select" id="type-select">
+                                <option value="all" selected data-i18n="all_types">Все типы</option>
+                                <option value="income" data-i18n="income">Доход</option>
+                                <option value="expense" data-i18n="expenses">Расход</option>
+                                <option value="transfer" data-i18n="transfer">Перевод</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="flex-grow: 1;">
+                            <label class="filter-label" data-i18n="search">Поиск</label>
+                            <input type="text" class="search-input" placeholder="Поиск операций" data-i18n-placeholder="search_transactions">
+                        </div>
+                    </div>
+
+                    <table class="transactions">
+                        <thead>
+                            <tr>
+                                <th data-i18n="transaction">Операция</th>
+                                <th data-i18n="date">Дата</th>
+                                <th data-i18n="amount">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-list">
+                            <!-- Transactions will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- New Account Page -->
+            <div class="page" id="new-account-page" style="display: none;">
+                <h1 class="page-title" data-i18n="open_account">Открыть счёт</h1>
+
+                <div class="card">
+                    <form id="account-form">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="account_type">Тип счёта</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" class="radio-input" name="account-type" value="debit" checked>
+                                    <span class="radio-label" data-i18n="debit_account">Дебетовый</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" class="radio-input" name="account-type" value="credit">
+                                    <span class="radio-label" data-i18n="credit_account">Кредитный</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" class="radio-input" name="account-type" value="savings">
+                                    <span class="radio-label" data-i18n="savings_account">Накопительный</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="currency" data-i18n="currency">Валюта</label>
+                            <select class="form-control" id="currency" required>
+                                <option value="" disabled selected data-i18n="select_currency">Выберите валюту</option>
+                                <option value="USD">USD - Доллар США</option>
+                                <option value="EUR">EUR - Евро</option>
+                                <option value="RUB">RUB - Российский рубль</option>
+                                <option value="GBP">GBP - Фунт стерлингов</option>
+                            </select>
+                            <div class="form-error" id="currency-error" data-i18n="select_currency_error">Пожалуйста, выберите валюту</div>
+                        </div>
+
+                        <h3 class="card-title" style="margin: 1.5rem 0;" data-i18n="select_tariff">Выберите тариф</h3>
+
+                        <div class="tariff-cards">
+                            <div class="tariff-card" data-tariff="standard">
+                                <div class="tariff-name" data-i18n="standard">Стандарт</div>
+                                <div class="tariff-price">0 ₽/мес</div>
+                                <ul class="tariff-features">
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="free_account_maintenance">Бесплатное обслуживание</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="free_card">Бесплатная карта</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="cashback_1">Кэшбэк 1%</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="free_transfers">Бесплатные переводы</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tariff-card" data-tariff="premium">
+                                <div class="tariff-name" data-i18n="premium">Премиум</div>
+                                <div class="tariff-price">990 ₽/мес</div>
+                                <ul class="tariff-features">
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="premium_support">Премиальная поддержка</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="metal_card">Металлическая карта</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="cashback_3">Кэшбэк до 3%</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="free_insurance">Бесплатная страховка</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tariff-card" data-tariff="business">
+                                <div class="tariff-name" data-i18n="business">Бизнес</div>
+                                <div class="tariff-price">1 990 ₽/мес</div>
+                                <ul class="tariff-features">
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="business_support">Бизнес-поддержка</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="multiple_cards">До 5 карт</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="cashback_5">Кэшбэк до 5%</span>
+                                    </li>
+                                    <li class="tariff-feature">
+                                        <i data-lucide="check"></i>
+                                        <span data-i18n="accounting_tools">Бухгалтерские инструменты</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <button type="submit" class="btn btn-primary" data-i18n="open_account">Открыть счёт</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Transfer Page -->
+            <div class="page" id="transfer-page" style="display: none;">
+                <h1 class="page-title" data-i18n="new_transfer">Новый перевод</h1>
+
+                <div class="card">
+                    <form id="transfer-form">
+                        <div class="form-group">
+                            <label class="form-label" for="from-account" data-i18n="from_account">С карты/счёта</label>
+                            <select class="form-control" id="from-account" required>
+                                <option value="" disabled selected data-i18n="select_account">Выберите счёт</option>
+                                <option value="card-1">VISA •••• 4679 (24,560.50 USD)</option>
+                                <option value="card-2">MC •••• 9821 (5,230.00 USD)</option>
+                            </select>
+                            <div class="form-error" id="from-account-error" data-i18n="select_account_error">Пожалуйста, выберите счёт</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="recipient" data-i18n="recipient">Получатель</label>
+                            <select class="form-control" id="recipient" required>
+                                <option value="" disabled selected data-i18n="select_recipient">Выберите получателя</option>
+                                <option value="new" data-i18n="new_recipient">Новый получатель</option>
+                                <option value="john">John Smith (•••• 3456)</option>
+                                <option value="alice">Alice Johnson (•••• 7890)</option>
+                                <option value="company">ABC Company (•••• 1234)</option>
+                            </select>
+                            <div class="form-error" id="recipient-error" data-i18n="select_recipient_error">Пожалуйста, выберите получателя</div>
+                        </div>
+
+                        <div class="form-group" id="new-recipient-fields" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label" for="recipient-name" data-i18n="recipient_name">Имя получателя</label>
+                                <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="recipient-card" data-i18n="card_number">Номер карты или телефона</label>
+                                <input type="text" class="form-control" id="recipient-card" placeholder="0000 0000 0000 0000 / +7 999 9999 99 99" data-i18n-placeholder="card_number_placeholder">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="recipient-bank" data-i18n="bank">Банк</label>
+                                <input type="text" class="form-control" id="recipient-bank">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="amount" data-i18n="amount">Сумма</label>
+                            <input type="number" class="form-control" id="amount" placeholder="0.00" required>
+                            <div class="form-error" id="amount-error" data-i18n="enter_amount_error">Пожалуйста, введите сумму</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message" data-i18n="message">Сообщение получателю (необязательно)</label>
+                            <input type="text" class="form-control" id="message" maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" data-i18n="continue">Продолжить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SMS Confirmation Modal -->
+    <div class="modal" id="sms-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="confirm_transfer">Подтверждение перевода</h3>
+                <button class="modal-close" id="sms-modal-close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p data-i18n="sms_sent">На номер +7••• ••••••89 отправлено SMS с кодом подтверждения.</p>
+                <p style="margin-top: 0.5rem;" data-i18n="enter_sms_code">Введите код из SMS:</p>
+                
+                <div class="sms-code-input">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                    <input type="text" maxlength="1" pattern="[0-9]">
+                </div>
+
+                <p style="text-align: center; margin-top: 1rem;">
+                    <a href="#" style="color: var(--primary);" id="resend-sms" data-i18n="resend_sms">Отправить код повторно</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-transfer" data-i18n="cancel">Отмена</button>
+                <button class="btn btn-primary" id="confirm-transfer" disabled data-i18n="confirm">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Progress Modal -->
+    <div class="modal" id="progress-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="processing_transfer">Обработка перевода</h3>
+            </div>
+            <div class="modal-body">
+                <div class="transfer-progress">
+                    <div class="progress-circle"></div>
+                    <p data-i18n="processing_please_wait">Обрабатываем ваш перевод, пожалуйста, подождите...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Success Modal -->
+    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" data-i18n="transfer_successful">Перевод выполнен</h3>
+                <button class="modal-close" id="success-modal-close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="transfer-success-animation">
+                    <!-- Анимированный SVG с проверкой -->
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    
+                    <div class="transfer-details">
+                        <h3 class="transfer-title">Перевод выполнен</h3>
+                        <div class="transfer-amount">
+                            <span class="currency">Р</span>
+                            <span class="amount">110</span>
+                            <span class="cents">.00</span>
+                        </div>
+                        
+                        <div class="transfer-info">
+                            <div class="info-row">
+                                <span class="info-label">Номер транзакции:</span>
+                                <span class="info-value">#TXN-984756</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Время:</span>
+                                <span class="info-value">Только что</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="success-modal-ok">Вернуться</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">
+            <i data-lucide="check"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title" id="toast-title">Успешно</div>
+            <div class="toast-message" id="toast-message">Операция выполнена успешно</div>
+        </div>
+        <button class="toast-close" id="toast-close">
+            <i data-lucide="x"></i>
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.300.0/lucide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/just-validate@3.7/dist/just-validate.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+    <script>
+
+
+        // DOM Elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const languageBtn = document.getElementById('language-btn');
+        const languageDropdown = document.getElementById('language-dropdown');
+        const currentLanguage = document.getElementById('current-language');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const overlay = document.getElementById('overlay');
+        const pages = {
+            home: document.getElementById('home-page'),
+            transactions: document.getElementById('transactions-page'),
+            'new-account': document.getElementById('new-account-page'),
+            transfer: document.getElementById('transfer-page')
+        };
+        const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+        const pageLinks = document.querySelectorAll('[data-page]');
+        const recipientSelect = document.getElementById('recipient');
+        const newRecipientFields = document.getElementById('new-recipient-fields');
+        const transferForm = document.getElementById('transfer-form');
+        const smsModal = document.getElementById('sms-modal');
+        const smsModalClose = document.getElementById('sms-modal-close');
+        const smsCodeInputs = document.querySelectorAll('.sms-code-input input');
+        const confirmTransferBtn = document.getElementById('confirm-transfer');
+        const cancelTransferBtn = document.getElementById('cancel-transfer');
+        const resendSmsLink = document.getElementById('resend-sms');
+        const progressModal = document.getElementById('progress-modal');
+        const successModal = document.getElementById('success-modal');
+        const successModalClose = document.getElementById('success-modal-close');
+        const successModalOk = document.getElementById('success-modal-ok');
+        const toast = document.getElementById('toast');
+        const toastClose = document.getElementById('toast-close');
+        const transactionsList = document.getElementById('transactions-list');
+        const tariffCards = document.querySelectorAll('.tariff-card');
+        const accountForm = document.getElementById('account-form');
+
+        // Translations
+        const translations = {
+            ru: {
+                home: "Главная",
+                transactions: "Операции",
+                new_account: "Счета",
+                transfer: "Перевод",
+                toggle_theme: "Сменить тему",
+                overview: "Обзор",
+                total_balance: "Общий баланс",
+                income: "Доход",
+                expenses: "Расход",
+                mobile_topup: "Пополнение телефона",
+                payments: "Платежи",
+                shopping: "Покупки",
+                exchange: "Обмен",
+                more: "Ещё",
+                my_cards: "Мои карты",
+                add_card: "+ Добавить карту",
+                card_holder: "Владелец",
+                expires: "Срок",
+                recent_transactions: "Последние операции",
+                view_all: "Все операции",
+                transaction: "Операция",
+                date: "Дата",
+                amount: "Сумма",
+                card_payment: "Оплата картой",
+                period: "Период",
+                all_time: "За всё время",
+                today: "Сегодня",
+                this_week: "На этой неделе",
+                this_month: "В этом месяце",
+                this_year: "В этом году",
+                custom: "Выбрать период",
+                type: "Тип",
+                all_types: "Все типы",
+                search: "Поиск",
+                search_transactions: "Поиск операций",
+                open_account: "Открыть счёт",
+                account_type: "Тип счёта",
+                debit_account: "Дебетовый",
+                credit_account: "Кредитный",
+                savings_account: "Накопительный",
+                currency: "Валюта",
+                select_currency: "Выберите валюту",
+                select_currency_error: "Пожалуйста, выберите валюту",
+                select_tariff: "Выберите тариф",
+                standard: "Стандарт",
+                free_account_maintenance: "Бесплатное обслуживание",
+                free_card: "Бесплатная карта",
+                cashback_1: "Кэшбэк 1%",
+                free_transfers: "Бесплатные переводы",
+                premium: "Премиум",
+                premium_support: "Премиальная поддержка",
+                metal_card: "Металлическая карта",
+                cashback_3: "Кэшбэк до 3%",
+                free_insurance: "Бесплатная страховка",
+                business: "Бизнес",
+                business_support: "Бизнес-поддержка",
+                multiple_cards: "До 5 карт",
+                cashback_5: "Кэшбэк до 5%",
+                accounting_tools: "Бухгалтерские инструменты",
+                new_transfer: "Новый перевод",
+                from_account: "С карты/счёта",
+                select_account: "Выберите счёт",
+                select_account_error: "Пожалуйста, выберите счёт",
+                recipient: "Получатель",
+                select_recipient: "Выберите получателя",
+                new_recipient: "Новый получатель",
+                select_recipient_error: "Пожалуйста, выберите получателя",
+                recipient_name: "Имя получателя",
+                card_number: "Номер карты",
+                card_number_placeholder: "0000 0000 0000 0000",
+                bank: "Банк",
+                enter_amount_error: "Пожалуйста, введите сумму",
+                message: "Сообщение получателю (необязательно)",
+                continue: "Продолжить",
+                confirm_transfer: "Подтверждение перевода",
+                sms_sent: "На номер +7••• ••••••89 отправлено SMS с кодом подтверждения.",
+                enter_sms_code: "Введите код из SMS:",
+                resend_sms: "Отправить код повторно",
+                cancel: "Отмена",
+                confirm: "Подтвердить",
+                processing_transfer: "Обработка перевода",
+                processing_please_wait: "Обрабатываем ваш перевод, пожалуйста, подождите...",
+                transfer_successful: "Перевод выполнен",
+                transfer_completed: "Перевод успешно завершён",
+                amount_transferred: "Сумма:",
+                recipient_received: "Получатель:",
+                transaction_id: "ID операции:",
+                done: "Готово"
+            },
+            en: {
+                home: "Home",
+                transactions: "Transactions",
+                new_account: "Accounts",
+                transfer: "Transfer",
+                toggle_theme: "Toggle theme",
+                overview: "Overview",
+                total_balance: "Total balance",
+                income: "Income",
+                expenses: "Expenses",
+                mobile_topup: "Mobile top-up",
+                payments: "Payments",
+                shopping: "Shopping",
+                exchange: "Exchange",
+                more: "More",
+                my_cards: "My cards",
+                add_card: "+ Add card",
+                card_holder: "Card holder",
+                expires: "Expires",
+                recent_transactions: "Recent transactions",
+                view_all: "View all",
+                transaction: "Transaction",
+                date: "Date",
+                amount: "Amount",
+                card_payment: "Card payment",
+                period: "Period",
+                all_time: "All time",
+                today: "Today",
+                this_week: "This week",
+                this_month: "This month",
+                this_year: "This year",
+                custom: "Custom",
+                type: "Type",
+                all_types: "All types",
+                search: "Search",
+                search_transactions: "Search transactions",
+                open_account: "Open account",
+                account_type: "Account type",
+                debit_account: "Debit",
+                credit_account: "Credit",
+                savings_account: "Savings",
+                currency: "Currency",
+                select_currency: "Select currency",
+                select_currency_error: "Please select currency",
+                select_tariff: "Select tariff",
+                standard: "Standard",
+                free_account_maintenance: "Free account maintenance",
+                free_card: "Free card",
+                cashback_1: "1% cashback",
+                free_transfers: "Free transfers",
+                premium: "Premium",
+                premium_support: "Premium support",
+                metal_card: "Metal card",
+                cashback_3: "Up to 3% cashback",
+                free_insurance: "Free insurance",
+                business: "Business",
+                business_support: "Business support",
+                multiple_cards: "Up to 5 cards",
+                cashback_5: "Up to 5% cashback",
+                accounting_tools: "Accounting tools",
+                new_transfer: "New transfer",
+                from_account: "From account",
+                select_account: "Select account",
+                select_account_error: "Please select account",
+                recipient: "Recipient",
+                select_recipient: "Select recipient",
+                new_recipient: "New recipient",
+                select_recipient_error: "Please select recipient",
+                recipient_name: "Recipient name",
+                card_number: "Card number",
+                card_number_placeholder: "0000 0000 0000 0000",
+                bank: "Bank",
+                enter_amount_error: "Please enter amount",
+                message: "Message to recipient (optional)",
+                continue: "Continue",
+                confirm_transfer: "Transfer confirmation",
+                sms_sent: "An SMS with a confirmation code has been sent to +7••• ••••••89.",
+                enter_sms_code: "Enter the code from SMS:",
+                resend_sms: "Resend code",
+                cancel: "Cancel",
+                confirm: "Confirm",
+                processing_transfer: "Processing transfer",
+                processing_please_wait: "Processing your transfer, please wait...",
+                transfer_successful: "Transfer completed",
+                transfer_completed: "Transfer completed successfully",
+                amount_transferred: "Amount:",
+                recipient_received: "Recipient:",
+                transaction_id: "Transaction ID:",
+                done: "Done"
+            }
+        };
+
+        // Current language
+        let currentLang = 'ru';
+
+        // Theme
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        let currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+
+        // Initialize
+        function init() {
+            // Set theme
+            setTheme(currentTheme);
+
+            // Set language
+            setLanguage(currentLang);
+
+            // Navigation
+            setupNavigation();
+
+            // Forms
+            setupForms();
+
+            // Modals
+            setupModals();
+
+            // Generate fake transactions
+            generateTransactions();
+
+            // Event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            mobileThemeToggle.addEventListener('click', toggleTheme);
+            languageBtn.addEventListener('click', toggleLanguageDropdown);
+            document.addEventListener('click', closeLanguageDropdown);
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+            overlay.addEventListener('click', closeMobileMenu);
+            recipientSelect.addEventListener('change', toggleNewRecipientFields);
+            smsCodeInputs.forEach((input, index) => {
+                input.addEventListener('input', () => handleSmsCodeInput(input, index));
+                input.addEventListener('keydown', (e) => handleSmsCodeKeyDown(e, index));
+            });
+            confirmTransferBtn.addEventListener('click', confirmTransfer);
+            cancelTransferBtn.addEventListener('click', cancelTransfer);
+            resendSmsLink.addEventListener('click', resendSms);
+            successModalClose.addEventListener('click', closeSuccessModal);
+            successModalOk.addEventListener('click', closeSuccessModal);
+            toastClose.addEventListener('click', hideToast);
+
+            // Select tariff
+            tariffCards.forEach(card => {
+                card.addEventListener('click', () => selectTariff(card));
+            });
+        }
+
+        // Theme functions
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(currentTheme);
+        }
+
+        // Language functions
+        function setLanguage(lang) {
+            currentLang = lang;
+            currentLanguage.textContent = lang.toUpperCase();
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.setAttribute('placeholder', translations[lang][key]);
+                }
+            });
+        }
+
+        function toggleLanguageDropdown(e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('active');
+        }
+
+        function closeLanguageDropdown(e) {
+            if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('active');
+            }
+        }
+
+        // Navigation functions
+        function setupNavigation() {
+            pageLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    showPage(page);
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                        if (navLink.getAttribute('data-page') === page) {
+                            navLink.classList.add('active');
+                        }
+                    });
+                    
+                    // Close mobile menu if open
+                    closeMobileMenu();
+                });
+            });
+        }
+
+        function showPage(page) {
+            // Hide all pages
+            Object.values(pages).forEach(p => p.style.display = 'none');
+            
+            // Show selected page
+            if (pages[page]) {
+                pages[page].style.display = 'block';
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Special initialization for pages
+                if (page === 'transactions') {
+                    // Could load transactions here
+                }
+            }
+        }
+
+        // Mobile menu functions
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Form functions
+        function setupForms() {
+            // Transfer form
+            transferForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                openSmsModal();
+            });
+
+            // Account form
+            accountForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showToast('success', translations[currentLang].open_account, translations[currentLang].account_opened_successfully);
+            });
+
+            // JustValidate for forms
+            if (JustValidate) {
+                // Transfer form validation
+                new JustValidate('#transfer-form', {
+                    validateBeforeSubmitting: true,
+                    errorFieldCssClass: 'error',
+                    errorLabelCssClass: 'form-error',
+                    errorLabelStyle: {
+                        color: 'var(--error)',
+                    },
+                    focusInvalidField: true,
+                })
+                .addField('#from-account', [
+                    {
+                        rule: 'required',
+                        errorMessage: translations[currentLang].select_account_error,
+                    }
+                ])
+                .addField('#recipient', [
+                    {
+                        rule: 'required',
+                        errorMessage: translations[currentLang].select_recipient_error,
+                    }
+                ])
+                .addField('#amount', [
+                    {
+                        rule: 'required',
+                        errorMessage: translations[currentLang].enter_amount_error,
+                    },
+                    {
+                        rule: 'number',
+                        errorMessage: translations[currentLang].amount_must_be_number,
+                    },
+                    {
+                        rule: 'minNumber',
+                        value: 1,
+                        errorMessage: translations[currentLang].amount_must_be_positive,
+                    }
+                ]);
+
+                                // Account form validation
+                                new JustValidate('#account-form', {
+                    validateBeforeSubmitting: true,
+                    errorFieldCssClass: 'error',
+                    errorLabelCssClass: 'form-error',
+                    errorLabelStyle: {
+                        color: 'var(--error)',
+                    },
+                    focusInvalidField: true,
+                })
+                .addField('#currency', [
+                    {
+                        rule: 'required',
+                        errorMessage: translations[currentLang].select_currency_error || 'Please select currency',
+                    }
+                ]);
+                // Note: Radio buttons (account-type) are typically always valid if one is required and pre-selected
+                // You could add validation for them if needed, but it's often not necessary.
+            }
+        }
+
+        function toggleNewRecipientFields() {
+            if (recipientSelect.value === 'new') {
+                newRecipientFields.style.display = 'block';
+            } else {
+                newRecipientFields.style.display = 'none';
+            }
+        }
+
+        // Modal functions
+        function setupModals() {
+            smsModalClose.addEventListener('click', () => {
+                smsModal.classList.remove('active');
+            });
+
+            // Close modal if clicked outside content
+            smsModal.addEventListener('click', (e) => {
+                if (e.target === smsModal) {
+                    smsModal.classList.remove('active');
+                }
+            });
+        }
+
+        function openSmsModal() {
+            // Simple validation check before opening (you might want more robust checks)
+            const fromAccount = document.getElementById('from-account').value;
+            const recipient = document.getElementById('recipient').value;
+            const amount = document.getElementById('amount').value;
+
+            if (fromAccount && recipient && amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                smsModal.classList.add('active');
+
+                // Clear previous SMS code input
+                smsCodeInputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('error'); // Clear potential error class
+                });
+                confirmTransferBtn.disabled = true;
+
+                // Focus first input field
+                if (smsCodeInputs.length > 0) {
+                    smsCodeInputs[0].focus();
+                }
+            } else {
+                // Trigger form validation or show error if form isn't handled by JustValidate here
+                // For now, rely on JustValidate to show errors on submit attempt
+                 showToast('error', 'Ошибка', 'Пожалуйста, заполните все обязательные поля корректно.');
+            }
+        }
+
+
+        function handleSmsCodeInput(input, index) {
+            const value = input.value;
+
+            // Auto-move to next field if a digit is entered
+            if (value.length === 1 && index < smsCodeInputs.length - 1) {
+                smsCodeInputs[index + 1].focus();
+            }
+
+            // Auto-move to previous field if backspace is pressed on empty field
+            // (Handled in handleSmsCodeKeyDown)
+
+            // Enable confirm button only if all fields are filled
+            checkSmsCodeCompletion();
+        }
+
+        function handleSmsCodeKeyDown(e, index) {
+            // Handle backspace for moving to previous field
+            if (e.key === 'Backspace' && index > 0 && e.target.value === '') {
+                smsCodeInputs[index - 1].focus();
+            }
+
+            // Allow only digits (optional, as input type is text with pattern)
+            // This prevents non-numeric characters from being entered easily
+            if (e.key >= '0' && e.key <= '9') {
+                return; // Allow
+            }
+            // Allow control keys
+            if (e.key === 'Backspace' || e.key === 'Delete' || e.key === 'Tab' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                return;
+            }
+            // Prevent all other keys
+            e.preventDefault();
+        }
+
+        function checkSmsCodeCompletion() {
+             const allFilled = Array.from(smsCodeInputs).every(input => input.value.length === 1);
+             confirmTransferBtn.disabled = !allFilled;
+        }
+
+        function confirmTransfer() {
+            const code = Array.from(smsCodeInputs).map(input => input.value).join('');
+            // Simulate SMS code check (e.g., '123456')
+            if (code === '123456') { // Replace with actual verification logic
+                smsModal.classList.remove('active');
+                showProgressModal();
+                // Simulate processing delay
+                setTimeout(() => {
+                    hideProgressModal();
+                    showSuccessModal();
+                }, 2000); // 2 seconds delay
+            } else {
+                // Highlight incorrect fields or show error message
+                smsCodeInputs.forEach(input => {
+                    if (!input.value) {
+                         input.classList.add('error'); // Add error styling if needed via CSS
+                    } else {
+                         input.classList.remove('error');
+                    }
+                });
+                showToast('error', 'Неверный код', 'Введённый код подтверждения неверен. Пожалуйста, проверьте и попробуйте снова.');
+                // Optionally, shake the input container or highlight it
+            }
+        }
+
+        function cancelTransfer() {
+            smsModal.classList.remove('active');
+        }
+
+        function resendSms() {
+            // Simulate resending SMS
+            showToast('info', 'Код отправлен', 'Новый код подтверждения был отправлен на ваш номер.');
+             // Clear existing code inputs
+            smsCodeInputs.forEach(input => input.value = '');
+            confirmTransferBtn.disabled = true;
+            // Refocus first input
+            if (smsCodeInputs.length > 0) {
+                smsCodeInputs[0].focus();
+            }
+        }
+
+        function showProgressModal() {
+            progressModal.classList.add('active');
+        }
+
+        function hideProgressModal() {
+            progressModal.classList.remove('active');
+        }
+
+        function showSuccessModal() {
+            successModal.classList.add('active');
+        }
+
+        function closeSuccessModal() {
+            successModal.classList.remove('active');
+            // Optionally, reset the transfer form here
+            transferForm.reset();
+            toggleNewRecipientFields(); // Hide new recipient fields if they were shown
+             // Show success toast
+            showToast('success', translations[currentLang].transfer_successful || 'Transfer completed', translations[currentLang].transfer_completed || 'Transfer completed successfully');
+        }
+
+        // Toast notification function
+        function showToast(type, title, message) {
+            // Set toast content
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+
+            // Set toast type class
+            toast.className = 'toast'; // Reset classes
+            toast.classList.add('toast-' + type); // Add type class (e.g., toast-success, toast-error)
+
+            // Update icon based on type (optional, Lucide icons are used)
+            const toastIcon = toast.querySelector('.toast-icon i');
+            if (toastIcon) {
+                 if (type === 'success') {
+                     toastIcon.setAttribute('data-lucide', 'check-circle');
+                 } else if (type === 'error') {
+                     toastIcon.setAttribute('data-lucide', 'x-circle');
+                 } else { // default or info
+                     toastIcon.setAttribute('data-lucide', 'info');
+                 }
+                 
+            }
+
+
+            // Show toast
+            toast.classList.add('show');
+
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                hideToast();
+            }, 3000);
+        }
+
+        function hideToast() {
+            toast.classList.remove('show');
+        }
+
+        // Transaction generation (simplified)
+        function generateTransactions() {
+            // In a real app, you'd fetch this data from a server
+            // Here we generate some fake data using basic JS or potentially faker if available and configured
+            const transactionData = [
+                { name: "Amazon", category: "shopping-bag", date: "Сегодня, 14:30", amount: "-129.99", type: "expense" },
+                { name: "Salary", category: "dollar-sign", date: "Вчера, 09:15", amount: "+3,450.00", type: "income" },
+                { name: "Starbucks", category: "coffee", date: "Вчера, 08:45", amount: "-5.75", type: "expense" },
+                { name: "Netflix", category: "monitor", date: "12 июля, 20:00", amount: "-15.99", type: "expense" },
+                { name: "Refund", category: "rotate-ccw", date: "10 июля, 11:20", amount: "+45.00", type: "income" },
+                { name: "Gas Station", category: "fuel", date: "08 июля, 17:45", amount: "-42.30", type: "expense" },
+                 { name: "Transfer to John", category: "send", date: "05 июля, 14:10", amount: "-100.00", type: "transfer" },
+                 { name: "Online Course", category: "book-open", date: "01 июля, 10:00", amount: "-29.99", type: "expense" },
+                 { name: "Dividends", category: "trending-up", date: "28 июня, 09:30", amount: "+120.50", type: "income" },
+                 { name: "Grocery Store", category: "shopping-cart", date: "25 июня, 18:15", amount: "-87.60", type: "expense" }
+            ];
+
+            transactionsList.innerHTML = ''; // Clear existing rows
+
+            transactionData.forEach(data => {
+                const row = document.createElement('tr');
+                row.className = 'transaction';
+                row.innerHTML = `
+                    <td>
+                        <div class="transaction-category">
+                            <div class="transaction-category-icon">
+                                <i data-lucide="${data.category}"></i>
+                            </div>
+                            <div class="transaction-info">
+                                <span class="transaction-name">${data.name}</span>
+                                <span class="transaction-date">${translations[currentLang][data.type] || data.type}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${data.date}</td>
+                    <td class="transaction-amount ${data.type}">${data.amount.replace('+', '+$').replace('-', '-$')}</td>
+                `;
+                transactionsList.appendChild(row);
+            });
+
+            // Re-initialize Lucide icons for the new elements
+            
+        }
+
+        // Tariff selection
+        function selectTariff(card) {
+            // Remove 'selected' class from all cards
+            tariffCards.forEach(c => c.classList.remove('selected'));
+            // Add 'selected' class to the clicked card
+            card.classList.add('selected');
+            // You could store the selected tariff value in a variable or hidden input if needed for form submission
+            // const selectedTariff = card.getAttribute('data-tariff');
+            // console.log('Selected tariff:', selectedTariff);
+        }
+
+
+        // Initialize the application when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
