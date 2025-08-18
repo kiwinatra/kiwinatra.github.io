@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kirill Avatars — Взрывной дизайн аватаров</title>
+    <!-- Библиотеки -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --neon-green: #00ff9d;
+            --neon-blue: #00e1ff;
+            --neon-purple: #bd00ff;
+            --text: #fff;
+            --glass: rgba(0, 255, 157, 0.05);
+            --section-bg: linear-gradient(135deg, rgba(5,5,15,0.9) 0%, rgba(0,10,20,0.95) 100%);
+            --section-bg-alt: linear-gradient(135deg, rgba(10,5,15,0.9) 0%, rgba(10,0,20,0.95) 100%);
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--text);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 157, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(0, 225, 255, 0.05) 0%, transparent 20%);
+        }
+
+        /* Шапка */
+        header {
+            position: fixed;
+            width: 100%;
+            height: var(--header-height);
+            padding: 0 5%;
+            backdrop-filter: blur(15px);
+            background: rgba(5,5,15,0.85);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+            transition: all 0.3s;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        /* Мобильное меню */
+        .mobile-menu-btn {
+            width: 30px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            background: var(--neon-green);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .mobile-menu-btn span:nth-child(1) { top: 0; }
+        .mobile-menu-btn span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .mobile-menu-btn span:nth-child(3) { bottom: 0; }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(5,5,15,0.98);
+            backdrop-filter: blur(15px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+            padding-top: var(--header-height);
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-menu a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.8rem;
+            margin: 1rem 0;
+            padding: 0.8rem 2rem;
+            position: relative;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+            text-align: center;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .mobile-menu.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu a:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu a:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu a:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu a:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--neon-green);
+        }
+
+        .mobile-menu a:hover::before {
+            width: 80%;
+        }
+
+        .close-menu-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Герой */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            background: var(--section-bg);
+            padding-top: var(--header-height);
+            text-align: center;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .hero-content {
+            width: 100%;
+            max-width: 100%;
+            z-index: 1;
+            padding-bottom: 20vh;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 8vw, 3.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
+            100% { text-shadow: 0 0 25px rgba(0, 225, 255, 0.5); }
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+            max-width: 100%;
+            padding: 0 5%;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+            width: 100%;
+            max-width: 250px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px rgba(0, 255, 157, 0.7);
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        /* Примеры работ */
+        .portfolio {
+            padding: 3rem 5%;
+            background: var(--section-bg-alt);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .portfolio::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,255,157,0.05) 0%, transparent 70%);
+            z-index: 0;
+            animation: rotateGradient 30s linear infinite;
+        }
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0;
+        }
+
+        .portfolio-item {
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            aspect-ratio: 1/1;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            margin: 0;
+        }
+
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,255,157,0.1) 0%, rgba(0,225,255,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+
+        .portfolio-item:hover::before {
+            opacity: 1;
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 157, 0.3);
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Как заказать */
+        .order-steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 5%;
+        }
+
+        .step {
+            background: rgba(10, 20, 30, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin: 0 auto 0.8rem;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+            transition: all 0.3s;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--neon-green);
+            transition: all 0.3s;
+        }
+
+        .step p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Прайс */
+        .pricing-table {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 5%;
+        }
+
+        .pricing-card {
+            background: rgba(10, 20, 30, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--neon-green);
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 1rem 0;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Отзывы */
+        .reviews-slider {
+            width: 100%;
+            padding: 1rem 0 2rem;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .reviews-slider::before,
+        .reviews-slider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 20%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .reviews-slider::before {
+            left: 0;
+            background: linear-gradient(90deg, rgba(5,5,15,0.9) 0%, transparent 100%);
+        }
+
+        .reviews-slider::after {
+            right: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(5,5,15,0.9) 100%);
+        }
+
+        .review-slide {
+            background: rgba(10, 20, 30, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.2rem;
+            border-left: 3px solid var(--neon-green);
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+
+        .review-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+        }
+
+        .review-author {
+            font-weight: 700;
+            color: var(--neon-green);
+            margin-top: auto;
+            font-size: 1rem;
+        }
+
+        .swiper-pagination {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .swiper-pagination-bullet {
+            background: rgba(255,255,255,0.5);
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+            transition: all 0.3s;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            transform: scale(1.2);
+        }
+
+        /* Контакты */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 5%;
+        }
+
+        .contact-info {
+            width: 100%;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            width: 100%;
+        }
+
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 255, 157, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .contact-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--neon-green);
+        }
+
+        .contact-text a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            word-break: break-all;
+        }
+
+        .contact-form {
+            width: 100%;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(10, 20, 30, 0.5);
+            border: 1px solid rgba(0, 255, 157, 0.2);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .contact-form textarea {
+            min-height: 120px;
+        }
+
+        /* Футер */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            background: rgba(5,5,15,0.8);
+            margin-top: 2rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 255, 157, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-link svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--neon-green);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5,5,15,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2rem;
+            color: var(--neon-green);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2001;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        /* Анимации при скролле */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Общие стили для секций */
+        section {
+            padding: 3rem 0;
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Исправленные стили для заголовков */
+        h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin: 0 auto 2rem;
+            text-align: center;
+            width: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            margin: 1.5rem auto 0;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+        }
+
+        /* Десктоп-версия */
+        @media (min-width: 768px) {
+            :root {
+                --header-height: 80px;
+            }
+            
+            header {
+                padding: 0 8%;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+            
+            .hero {
+                padding: 0 8%;
+                padding-top: var(--header-height);
+                text-align: left;
+            }
+            
+            .hero-content {
+                max-width: 600px;
+                margin: 0;
+                padding-bottom: 15vh;
+            }
+            
+            .hero h1 {
+                font-size: clamp(2.5rem, 5vw, 4rem);
+            }
+            
+            .hero p {
+                font-size: clamp(1rem, 3vw, 1.2rem);
+                padding: 0;
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .btn {
+                max-width: 300px;
+                margin-left: 0;
+            }
+            
+            section {
+                padding: 5rem 0;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+                padding: 0 8%;
+            }
+            
+            .order-steps,
+            .pricing-table {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+                padding: 0 8%;
+            }
+            
+            .step,
+            .pricing-card {
+                padding: 1.8rem;
+            }
+            
+            .contacts-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+                padding: 0 8%;
+            }
+            
+            .reviews-slider::before,
+            .reviews-slider::after {
+                width: 15%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .order-steps,
+            .pricing-table {
+                gap: 2rem;
+            }
+            
+            .step,
+            .pricing-card {
+                padding: 2rem;
+            }
+            
+            .reviews-slider::before,
+            .reviews-slider::after {
+                width: 10%;
+            }
+        }
+
+        /* Отключение анимаций для пользователей, которые их предпочитают не использовать */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+            
+            .animate-on-scroll {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background-color: var(--neon-green);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+.typed-text {
+    display: inline-block;
+    min-width: 100px; /* Чтобы курсор не прыгал */
+    color: var(--neon-blue); /* Можно задать другой цвет */
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.hero-content {
+    transform: translateZ(20px);
+    transition: transform 0.3s ease-out;
+}
+
+@media (hover: hover) {
+    .hero:hover .hero-content {
+        transform: translateZ(20px) translateY(calc(var(--mouse-y) * -10px)) 
+                   translateX(calc(var(--mouse-x) * 10px));
+    }
+}
+.hero-subtext {
+    font-size: 1.1rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+    margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+    to { opacity: 0.8; }
+}
+.scroll-down {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.scroll-down-mouse {
+    width: 24px;
+    height: 40px;
+    border: 2px solid var(--neon-green);
+    border-radius: 12px;
+    position: relative;
+}
+
+.scroll-down-mouse::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 8px;
+    background: var(--neon-green);
+    border-radius: 2px;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scrollWheel 2s infinite;
+}
+
+.scroll-down-arrow {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--neon-green);
+    border-bottom: 2px solid var(--neon-green);
+    transform: rotate(45deg);
+    margin: 8px auto 0;
+    opacity: 0;
+    animation: scrollArrow 2s infinite 0.5s;
+}
+
+@keyframes scrollWheel {
+    0%, 100% { transform: translate(-50%, 0); opacity: 1; }
+    50% { transform: translate(-50%, 10px); opacity: 0.5; }
+}
+
+@keyframes scrollArrow {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+@media (max-width: 768px) {
+    .hero {
+        min-height: 100vh;
+    }
+    
+    .hero-content {
+        padding-bottom: 30vh;
+    }
+    
+    .floating-circle,
+    .floating-diamond {
+        display: none; /* Убираем на мобильных для производительности */
+    }
+    
+    .scroll-down {
+        bottom: 20px;
+    }
+}
+.hero-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    fill: var(--neon-green);
+    opacity: 0.15;
+    animation: waveMove 10s linear infinite;
+}
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="logo">Kirill Avatars</div>
+        <div class="nav-links">
+            <a href="#order">Заказать</a>
+            <a href="#pricing">Прайс</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#contacts">Контакты</a>
+        </div>
+        <div class="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Мобильное меню -->
+    <div class="mobile-menu">
+        <div class="close-menu-btn">×</div>
+        <a href="#order">Заказать</a>
+        <a href="#pricing">Прайс</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#contacts">Контакты</a>
+    </div>
+
+    <section class="hero">
+         
+        <div id="particles-js"></div>
+        
+        <div class="hero-content animate-on-scroll">
+            <h1><span class="typed-text"></span><span class="cursor">&nbsp;</span> <br> аватары. </h1>
+            <p class="hero-subtext">Твой уникальный стиль начинается здесь</p>
+            <a href="#order" class="btn">Заказать сейчас</a>
+        </div>
+    </section>
+    
+    <div class="scroll-down">
+        <div class="scroll-down-mouse"></div>
+        <div class="scroll-down-arrow"></div>
+    </div>
+    <script infofordev="брооооооо">
+       document.addEventListener('DOMContentLoaded', function() {
+    const typedTextSpan = document.querySelector('.typed-text');
+    const cursorSpan = document.querySelector('.cursor');
+    
+    const textArray = ["Лучшие", "Качественные", "Стильные", "Уникальные"];
+    const typingDelay = 100;
+    const erasingDelay = 50;
+    const newTextDelay = 1500; // Задержка между словами
+    let textArrayIndex = 0;
+    let charIndex = 0;
+    
+    function type() {
+        if (charIndex < textArray[textArrayIndex].length) {
+            typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typingDelay);
+        } else {
+            setTimeout(erase, newTextDelay);
+        }
+    }
+    
+    function erase() {
+        if (charIndex > 0) {
+            typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex-1);
+            charIndex--;
+            setTimeout(erase, erasingDelay);
+        } else {
+            textArrayIndex++;
+            if(textArrayIndex >= textArray.length) textArrayIndex = 0;
+            setTimeout(type, typingDelay + 50);
+        }
+    }
+    
+    // Начинаем анимацию после загрузки
+    if(textArray.length) setTimeout(type, newTextDelay + 250);
+});
+    </script>
+    <script>
+        document.querySelector('.hero').addEventListener('mousemove', (e) => {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    e.currentTarget.style.setProperty('--mouse-x', x);
+    e.currentTarget.style.setProperty('--mouse-y', y);
+});
+    </script>
+    <script>
+        
+    </script>
+    
+   <!-- <svg class="hero-waves" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
+    </svg> 
+   -->
+    <!-- Примеры работ -->
+    <section class="portfolio">
+        <h2 class="animate-on-scroll">Примеры работ</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item animate-on-scroll" data-img="отзыв_1.png">
+                <img src="avatar_4 (2).jpg" alt="Пример аватара 1">
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-img="отзыв_2.png" style="transition-delay: 0.1s">
+                <img src="avatar_2.jpg" alt="Пример аватара 2">
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-img="отзыв_3.png" style="transition-delay: 0.2s">
+                <img src="avatar_3.jpg" alt="Пример аватара 3">
+            </div>
+            <div class="portfolio-item animate-on-scroll" data-img="отзыв_4.png" style="transition-delay: 0.3s">
+                <img src="avatar_4.jpg" alt="Пример аватара 4">
+            </div>
+        </div>
+    </section>
+
+    <!-- Как заказать -->
+    <section id="order">
+        <h2 class="animate-on-scroll">Как заказать</h2>
+        <div class="order-steps">
+            <div class="step animate-on-scroll">
+                <div class="step-number">1</div>
+                <h3>Загрузите фото</h3>
+                <p>Или опишите желаемый аватар.</p>
+            </div>
+            <div class="step animate-on-scroll" style="transition-delay: 0.1s">
+                <div class="step-number">2</div>
+                <h3>Укажите стиль</h3>
+                <p>Минимализм или другое.</p>
+            </div>
+            <div class="step animate-on-scroll" style="transition-delay: 0.2s">
+                <div class="step-number">3</div>
+                <h3>Согласуем детали</h3>
+                <p>Цвета и дополнительные пожелания.</p>
+            </div>
+            <div class="step animate-on-scroll" style="transition-delay: 0.3s">
+                <div class="step-number">4</div>
+                <h3>Получите аватар</h3>
+                <p>Обычно за 30-70 минут.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Прайс -->
+    <section id="pricing">
+        <!-- Фоновые частицы-туманность -->
+        <canvas id="nebula-canvas" class="nebula-bg"></canvas>
+        
+        <h2 class="animate-on-scroll">Прайс-лист</h2>
+        
+        <div class="pricing-table">
+          <!-- Базовый пакет -->
+          <div class="pricing-card animate-on-scroll">
+            <div class="particle-overlay"></div>
+            <div class="card-content">
+              <h3>Базовый пакет</h3>
+              <p>Уникальный минималистичный дизайн</p>
+              <div class="price">от 75 ₽</div>
+              <p class="stars">или 50 <span class="star">★</span></p>
+            </div>
+          </div>
+          
+          <!-- Премиум пакет -->
+          <div class="pricing-card animate-on-scroll" style="transition-delay: 0.1s">
+            <div class="particle-overlay"></div>
+            <div class="card-content">
+              <h3>Премиум пакет</h3>
+              <p>Аватар для Telegram, ВК и других платформ</p>
+              <div class="price">от 100 ₽</div>
+              <p class="stars">или 75 <span class="star">★</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <style>
+        /* Базовые стили */
+        #pricing {
+          padding: 5rem 5%;
+          background: 
+            radial-gradient(ellipse at top left, rgba(11, 5, 25, 0.9) 0%, #050510 100%);
+          position: relative;
+          overflow: hidden;
+        }
+      
+        /* Фон туманности */
+        .nebula-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          opacity: 0.6;
+        }
+      
+        /* Карточка */
+        .pricing-card {
+          position: relative;
+          border-radius: 24px;
+          padding: 0;
+          overflow: hidden;
+          background: rgba(10, 5, 25, 0.6);
+          border: 1px solid rgba(0, 255, 157, 0.15);
+          box-shadow:
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(0, 255, 157, 0.05);
+          transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+          z-index: 2;
+        }
+      
+        /* Наложение частиц */
+        .particle-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: 
+            radial-gradient(circle at 30% 70%, rgba(0, 255, 157, 0.03) 0%, transparent 40%),
+            radial-gradient(circle at 70% 30%, rgba(0, 225, 255, 0.03) 0%, transparent 40%);
+          z-index: 1;
+        }
+      
+        /* Контент карточки */
+        .card-content {
+          position: relative;
+          padding: 2rem;
+          z-index: 3;
+          color: white;
+        }
+      
+        /* Стили текста */
+        h3 {
+          font-size: 1.6rem;
+          margin-bottom: 0.7rem;
+          color: #00ff9d;
+          text-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+      
+        .price {
+          font-size: 2.2rem;
+          font-weight: 800;
+          margin: 1.5rem 0;
+          background: linear-gradient(90deg, #00ff9d, #00e1ff);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+        }
+      
+        .stars {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.95rem;
+        }
+      
+        .star {
+          color: #ffd700;
+          display: inline-block;
+          animation: starTwinkle 3s infinite alternate;
+        }
+      
+        @keyframes starTwinkle {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; transform: scale(0.95); }
+        }
+      
+        /* Расположение карточек */
+        .pricing-table {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          max-width: 1200px;
+          margin: 3rem auto 0;
+          position: relative;
+          z-index: 2;
+        }
+      
+        /* Эффекты взаимодействия */
+        .pricing-card:hover {
+          transform: translateY(-8px);
+          box-shadow:
+            0 15px 40px rgba(0, 255, 157, 0.3),
+            0 0 0 1px rgba(0, 255, 157, 0.1);
+        }
+      
+        .pricing-card:hover .star {
+          animation: starPulse 1s infinite alternate;
+        }
+      
+        @keyframes starPulse {
+          to { transform: scale(1.3); opacity: 0.9; }
+        }
+      
+        /* Адаптация для мобильных */
+        @media (max-width: 768px) {
+          #pricing {
+            padding: 3rem 5%;
+          }
+          
+          .pricing-card {
+            padding: 1.5rem;
+          }
+          
+          .price {
+            font-size: 1.8rem;
+          }
+        }
+      </style>
+      
+      <script>
+        // Инициализация частиц туманности
+        document.addEventListener('DOMContentLoaded', () => {
+          const canvas = document.getElementById('nebula-canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Настройка canvas
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          
+          // Параметры туманности
+          const particles = [];
+          const particleCount = window.innerWidth < 768 ? 60 : 120;
+          
+          // Создание частиц
+          for (let i = 0; i < particleCount; i++) {
+            particles.push({
+              x: Math.random() * canvas.width,
+              y: Math.random() * canvas.height,
+              size: Math.random() * 3 + 1,
+              speedX: (Math.random() - 0.5) * 0.2,
+              speedY: (Math.random() - 0.5) * 0.2,
+              color: `hsla(${Math.random() * 60 + 160}, 100%, 70%, ${Math.random() * 0.3 + 0.1})`
+            });
+          }
+          
+          // Анимация
+          function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+              ctx.beginPath();
+              ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+              ctx.fillStyle = particle.color;
+              ctx.fill();
+              
+              // Движение
+              particle.x += particle.speedX;
+              particle.y += particle.speedY;
+              
+              // Возврат на другую сторону при выходе за границы
+              if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+              if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+            });
+            
+            requestAnimationFrame(animateParticles);
+          }
+          
+          animateParticles();
+          
+          // Реакция на курсор
+          document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            particles.forEach(particle => {
+              const dx = mouseX - particle.x;
+              const dy = mouseY - particle.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              
+              if (distance < 100) {
+                particle.speedX = dx * 0.01;
+                particle.speedY = dy * 0.01;
+              }
+            });
+          });
+          
+          // Адаптация под resize
+          window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+          });
+        });
+      </script>
+    <style io-id="review-style-new" proc-dev="new, added, so just make it magic lol. Made by Potemkin!!">
+        .review-image {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(0, 255, 157, 0.2);
+}
+
+.review-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.review-slide:hover .review-image img {
+    transform: scale(1.05);
+}
+
+.review-slide {
+    min-height: 350px; /* Увеличиваем высоту слайда для размещения изображения */
+    padding: 1.5rem;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .review-image {
+        height: 120px;
+    }
+    
+    .review-slide {
+        min-height: 320px;
+    }
+}
+
+.rating {
+    display: inline-flex;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.star {
+    color: #ccc; /* Серый цвет для неактивных звезд */
+    margin-right: 2px;
+}
+
+.star.filled {
+    color: #ffc107; /* Желтый цвет для активных звезд */
+    text-shadow: 0 0 5px rgba(255, 193, 7, 0.5); /* Небольшое свечение */
+}
+@media (max-width: 768px) {
+    .rating {
+        font-size: 1rem;
+    }
+}
+
+    </style>
+
+    <!-- Отзывы -->
+<section id="reviews">
+    <h2 class="animate-on-scroll">Отзывы</h2>
+    <div class="reviews-slider swiper animate-on-scroll">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="review-slide">
+                    <div class="review-image">
+                        <img src="ot2.jpg" alt="Отзыв 1">
+                    </div>
+                    <p class="review-text">
+                        
+
+                    </p>
+                    <center><div class="rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <p class="review-author">Аноним</p>
+                </div></center>
+            </div>
+            <div class="swiper-slide">
+                <div class="review-slide">
+                    <div class="review-image">
+                        <img src="ot3.jpg" alt="Отзыв 2">
+                    </div>
+                    <p class="review-text"></p>
+                    <center><div class="rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star">★</span>
+                    </div></center>
+                    <p class="review-author">Аноним</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="review-slide">
+                    <div class="review-image">
+                        <img src="otp.jpg" alt="Отзыв 3">
+                    </div>
+                    <p class="review-text"></p>
+                    <center><div class="rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div></center>
+                    <p class="review-author">Аноним</p>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="review-slide">
+                    <div class="review-image">
+                        <img src="ott.jpg" alt="Отзыв 4">
+                    </div>
+                    <p class="review-text"></p>
+                    <center><div class="rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div></center>
+                    <p class="review-author">Аноним</p>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+    <!-- Контакты -->
+    <section id="contacts">
+        <h2 class="animate-on-scroll">Контакты</h2>
+        <div class="contacts-grid">
+            <div class="contact-info animate-on-scroll">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/>
+                            <path d="M8 12h8v2H8z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-text">
+                        Telegram: <a href="https://t.me/kirilavatar">@kirilavatar</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/>
+                            <path d="M8 12h8v2H8z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-text">
+                        Канал: <a href="https://t.me/avatarza50">@avatarza50</a>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="contact-form animate-on-scroll" style="transition-delay: 0.1s">
+                <form>
+                    
+                    <button class="btn" onclick="window.location.href='https://t.me/kirilavatar'">
+                        <a href="https://t.me/avatarza50">Заказать!</a>
+                      </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <p>© 2023-2025 Kirill Avatars. Все права защищены.</p>
+        
+        <style>
+            </footer>
+  <!-- Ваш существующий футер -->
+  
+  <div class="credits">
+    <p>Сделал <span class="name">Шурик</span></p>
+    <div class="links">
+      <a href="https://t.me/neshurik_logovo" target="_blank">ТГК: @neshurik_logovo</a>
+      <a href="https://shonaax.github.io" target="_blank">Сайт: shonaax.github.io</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    /* Ваши существующие стили футера */
+    position: relative;
+    padding: 2rem 5%;
+    text-align: center;
+    background: rgba(5,5,15,0.8);
+  }
+
+  .credits {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .credits .name {
+    color: #00ff9d;
+    font-weight: 600;
+  }
+
+  .credits .links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .credits a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .credits a:hover {
+    color: #00e1ff;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .credits .links {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
+        </style>
+        <div class="credits">
+            <p>Дизайн и разработка: <span class="name">Шурик</span></p>
+            <div class="links">
+              <a href="https://t.me/neshurick_logovo" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.14-.26.26-.534.26l.213-3.053 5.56-5.022c.22-.198-.034-.278-.338-.1l-6.87 4.326-2.962-.924c-.64-.203-.658-.64.135-.954l11.57-4.46c.538-.196 1.006.128.832.941z"/>
+                </svg>
+                @shurik_logovo
+              </a>
+              <a href="https://shonaax.github.io" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-2-17h4v2h-4V5zm0 4h4v6h-4V9z"/>
+                </svg>
+                shonaax.github.io
+              </a>
+            </div>
+          </div>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="imageModal">
+        <span class="close-modal">×</span>
+        <div class="modal-content">
+            <h1>За заказом аватарок в <a href="https://t.me/@avatarza50">@avatarza50</a></h1>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Мобильное меню
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const closeMenuBtn = document.querySelector('.close-menu-btn');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        closeMenuBtn.addEventListener('click', () => {
+            menuBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Слайдер отзывов
+        const swiper = new Swiper('.reviews-slider', {
+    loop: true,
+    autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+    },
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+    slidesPerView: 1,
+    spaceBetween: 15,
+    breakpoints: {
+        640: {
+            slidesPerView: 1.2,
+        },
+        768: {
+            slidesPerView: 1.5,
+            spaceBetween: 20,
+        },
+        1024: {
+            slidesPerView: 2,
+            spaceBetween: 25,
+        }
+    }
+});
+
+        // Частицы на фоне
+        if (window.innerWidth > 320) {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { 
+                        value: 60, 
+                        density: { 
+                            enable: true, 
+                            value_area: 800 
+                        } 
+                    },
+                    color: { 
+                        value: ["#00ff9d", "#00e1ff", "#bd00ff"] 
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true,
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#00ff9d",
+                        opacity: 0.3,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 3,
+                        direction: "none",
+                        random: true,
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+        }
+
+        // Плавный скролл
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (mobileMenu.classList.contains('active')) {
+                    menuBtn.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Модальное окно
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeModal = document.querySelector('.close-modal');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        portfolioItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const imgSrc = item.getAttribute('data-img');
+                modalImg.src = imgSrc;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Анимации при скролле
+        const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+        function checkScroll() {
+            const windowHeight = window.innerHeight;
+            const triggerPoint = windowHeight * 0.85;
+            
+            animateElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                
+                if (elementTop < triggerPoint) {
+                    element.classList.add('animated');
+                }
+            });
+        }
+
+        window.addEventListener('load', checkScroll);
+        window.addEventListener('scroll', checkScroll);
+
+        // GSAP анимации для десктопа
+        if (window.innerWidth > 768) {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.hero-content h1', {
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3
+            });
+
+            gsap.from('.hero-content p', {
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.6
+            });
+
+            gsap.from('.hero-content .btn', {
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    toggleActions: 'play none none none'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.9
+            });
+
+            document.querySelectorAll('.portfolio-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: {
+                        trigger: '.portfolio',
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: i * 0.1
+                });
+            });
+        }
+
+        // Оптимизация для мобильных устройств
+        function handleResize() {
+            // Переинициализация частиц при изменении размера
+            if (window.innerWidth <= 768) {
+                if (window.pJSDom && window.pJSDom.length > 0) {
+                    window.pJSDom[0].pJS.fn.vendors.destroy();
+                }
+            } else {
+                if (!window.pJSDom || window.pJSDom.length === 0) {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { 
+                                value: 60, 
+                                density: { 
+                                    enable: true, 
+                                    value_area: 800 
+                                } 
+                            },
+                            color: { 
+                                value: ["#00ff9d", "#00e1ff", "#bd00ff"] 
+                            },
+                            opacity: {
+                                value: 0.5,
+                                random: true,
+                            },
+                            size: {
+                                value: 3,
+                                random: true,
+                            },
+                            line_linked: {
+                                enable: true,
+                                distance: 150,
+                                color: "#00ff9d",
+                                opacity: 0.3,
+                                width: 1
+                            },
+                            move: {
+                                enable: true,
+                                speed: 3,
+                                direction: "none",
+                                random: true,
+                            }
+                        },
+                        interactivity: {
+                            detect_on: "canvas",
+                            events: {
+                                onhover: {
+                                    enable: true,
+                                    mode: "grab"
+                                },
+                                onclick: {
+                                    enable: true,
+                                    mode: "push"
+                                },
+                                resize: true
+                            }
+                        },
+                        retina_detect: true
+                    });
+                }
+            }
+        }
+
+        // Обработчик изменения размера окна
+        window.addEventListener('resize', handleResize);
+    </script>
+   <!-- <script>
+        function createRating(rating, maxRating = 5) {
+    const container = document.createElement('div');
+    container.className = 'rating';
+    
+    for (let i = 1; i <= maxRating; i++) {
+        const star = document.createElement('span');
+        star.className = 'star' + (i <= rating ? ' filled' : '');
+        star.innerHTML = '★';
+        container.appendChild(star);
+    }
+    
+    return container;
+}
+
+// Использование:
+const ratingElement = createRating(4);
+document.querySelector('.review-slide').prepend(ratingElement);
+    </script>
+    -->
+</body>
+</html>

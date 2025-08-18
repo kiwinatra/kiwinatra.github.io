@@ -1,0 +1,179 @@
+:root {
+    --ACCENT_COLOR: #fab31e;
+    --ACCENT_COLOR_RGB: 250, 179, 30;
+
+    --BODY_COLOR: rgb(21 21 21);
+    --AIR_COLOR: rgba(43, 43, 43, 0.7);
+    --AIR_BLOCK_COLOR: rgba(143, 143, 143, 0.2);
+    --AIR_SHADOW: 0px 3px 10px -3px rgba(0, 0, 0, 0.5);
+
+    --AIR_CONTEXT_SHADOW_COLOR_START: rgba(53, 51, 61, 0.3);
+    --AIR_CONTEXT_SHADOW_COLOR_END: rgba(6, 6, 8, 0.7);
+
+    --BLOCK_COLOR: rgba(37, 37, 37, 0.8);
+    --BLOCK_COLOR_LITE: rgba(37, 37, 37, 0.6);
+    --BLOCK_COLOR_LITE_TEXT: rgba(189, 189, 190, 0.9);
+    --BLOCK_BLOCK_COLOR: rgba(59, 59, 59, 0.8);
+    --BLOCK_BLOCK_COLOR_LITE: rgba(58, 58, 60, 0.6);
+    --BLOCK_SHADOW: 0px 1px 2px -1px rgba(0, 0, 0, 0.65);
+
+    --INPUT_COLOR: rgba(55, 55, 55, 0.8);
+
+    --BTN_TEXT_COLOR: #dbdbdb;
+    --BTN_BACKGROUND: rgba(55, 55, 55, 0.8);
+    --BTN_CLOSE_COLOR: rgba(207, 92, 92, 0.5);
+
+    --INTERACTION_BTN_COLOR: rgba(61, 61, 61, 0.7);
+    --INTERACTION_BTN_TEXT_COLOR: rgba(255, 255, 255, 0.7);
+
+    --GRADIENT: linear-gradient(345deg, #5c375f, #5b5eae) #5c4882;
+    --GRADIENT_SHADOW: 0px 0px 9px -1px rgba(206, 138, 69, 0.72);
+
+    --TITLE_COLOR: rgba(255, 255, 255, 0.9);
+    --TEXT_COLOR: rgba(233, 233, 233, 0.9);
+
+    --D_OR_P_COLOR: rgba(191, 191, 191, 0.9);
+
+    --REPLY_BG: linear-gradient(465deg, rgba(250, 179, 30, 0.4), rgba(253, 147, 71, 0.4));
+    --REPLY_SVG_COLOR: rgba(253, 147, 71, 0.7);
+
+    --GLASS_BACKDROP: blur(20px) saturate(180%);
+    --GLASS_BORDER: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Liquid Glass эффект */
+.UI-Blur, 
+header, 
+.Notifications-NewNotification,
+.UI-Window_BG,
+.Post .Image .Censoring, 
+.Post .Image .Blur,
+.Music-FullPlayer_BG_Blur,
+.Info-BL_R,
+.Dashboard-BottomBar,
+.UI-QuestionModal .Back,
+.Settings-CP_Cover .Settings-ChangeButtons .Button,
+.GoldSub-User {
+    background: var(--AIR_COLOR);
+    backdrop-filter: var(--GLASS_BACKDROP);
+    -webkit-backdrop-filter: var(--GLASS_BACKDROP);
+    border: var(--GLASS_BORDER);
+    border-radius: 12px;
+}
+
+/* Элементы с прозрачностью */
+.UI-Switch,
+.UI-Tabs .Tab,
+.UI-Input,
+.BTN_BACKGROUND,
+.INTERACTION_BTN_COLOR,
+.INPUT_COLOR {
+    background: rgba(55, 55, 55, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Акцентные элементы */
+.UI-Window_button,
+.UI-FormButton,
+.UI-AddPost .Buttons .Send,
+.UI-Send,
+.UI-Switch-On,
+.Post .InteractionButtons .Liked {
+    background: var(--GRADIENT);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Текст и заголовки */
+a, .UI-Tabs .ActiveTab, .Info-API_QT, .TITLE_COLOR {
+    color: var(--TITLE_COLOR);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Плейсхолдеры */
+input[type="text"]::-webkit-input-placeholder, 
+input[type="password"]::-webkit-input-placeholder, 
+textarea::-webkit-input-placeholder {
+    color: rgba(193, 192, 199, 0.7);
+}
+
+/* Логотип */
+.UI-Logo {
+    background-image: url('/static_sys/Images/GoldStar.svg');
+    filter: drop-shadow(0px 0px 4px rgba(253, 177, 102, 0.62));
+}
+
+/* Ховер-эффекты */
+.UI-Window_button:hover,
+.UI-FormButton:hover,
+.UI-AddPost .Buttons .Send:hover,
+.UI-Input:hover,
+.UI-Input:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    outline-offset: 2px;
+}
+
+/* Чат */
+.Chat-Error_message,
+.Chat-M_URS,
+.Chat-M_Me .Loader, 
+.Chat-M_URS .Loader {
+    background: rgba(55, 55, 55, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Музыкальный плеер */
+.Music-SongPrev .Cover .CoverShadow {
+    filter: blur(16px) brightness(0.6);
+    opacity: 0.8;
+}
+
+.Music-FullPlayer_C .Controls .UI-Slider .Progress {
+    background: rgba(255, 255, 255, 0.9);
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Адаптив */
+@media only screen and (max-width: 768px) {
+    .UI-L_NAV button {
+        background: transparent;
+        backdrop-filter: none;
+    }
+    
+    header {
+        backdrop-filter: var(--GLASS_BACKDROP);
+        -webkit-backdrop-filter: var(--GLASS_BACKDROP);
+    }
+}
+
+/* Эффект Liquid Glass для кнопок */
+button, .UI-FormButton, .UI-Send {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button:after, .UI-FormButton:after, .UI-Send:after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.3s ease;
+}
+
+button:hover:after, .UI-FormButton:hover:after, .UI-Send:hover:after {
+    left: 100%;
+}

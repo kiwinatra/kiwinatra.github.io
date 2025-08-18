@@ -1,0 +1,158 @@
+:root {
+    --ACCENT_COLOR: #fab31e;
+    --ACCENT_COLOR_RGB: 250, 179, 30;
+
+    --BODY_COLOR: rgba(21, 21, 21, 0.6);
+    --AIR_COLOR: rgba(43, 43, 43, 0.3);
+    --AIR_BLOCK_COLOR: rgba(143, 143, 143, 0.1);
+    --AIR_SHADOW: 0 3px 10px -3px rgba(0, 0, 0, 0.3);
+
+    --AIR_CONTEXT_SHADOW_COLOR_START: rgba(53, 51, 61, 0.15);
+    --AIR_CONTEXT_SHADOW_COLOR_END: rgba(6, 6, 8, 0.4);
+
+    --BLOCK_COLOR: rgba(37, 37, 37, 0.4);
+    --BLOCK_COLOR_LITE: rgba(37, 37, 37, 0.25);
+    --BLOCK_COLOR_LITE_TEXT: rgba(189, 189, 190, 0.8);
+    --BLOCK_BLOCK_COLOR: rgba(59, 59, 59, 0.3);
+    --BLOCK_BLOCK_COLOR_LITE: rgba(58, 58, 60, 0.2);
+    --BLOCK_SHADOW: 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+
+    --INPUT_COLOR: rgba(55, 55, 55, 0.3);
+
+    --BTN_TEXT_COLOR: #dbdbdb;
+    --BTN_BACKGROUND: rgba(55, 55, 55, 0.3);
+    --BTN_CLOSE_COLOR: rgba(207, 92, 92, 0.3);
+
+    --INTERACTION_BTN_COLOR: rgba(61, 61, 61, 0.3);
+    --INTERACTION_BTN_TEXT_COLOR: rgba(255, 255, 255, 0.7);
+
+    --GRADIENT: linear-gradient(345deg, #5c375fcc, #5b5eaecc);
+    --GRADIENT_SHADOW: 0 0 9px -1px rgba(206, 138, 69, 0.4);
+
+    --TITLE_COLOR: rgba(255, 255, 255, 0.9);
+    --TEXT_COLOR: rgba(233, 233, 233, 0.85);
+
+    --D_OR_P_COLOR: rgba(191, 191, 191, 0.7);
+
+    --REPLY_BG: linear-gradient(465deg, rgba(250, 179, 30, 0.2), rgba(253, 147, 71, 0.2));
+    --REPLY_SVG_COLOR: rgba(253, 147, 71, 0.5);
+
+    --GOLD_GRADIENT: linear-gradient(345deg, #fab31e, #fda547);
+}
+
+/* Обновление фонов с эффектом жидкого стекла и blur */
+
+.UI-Blur,
+.Notifications-NewNotification,
+.UI-Switch,
+.Chat-Error_message,
+.Chat-M_URS,
+.Chat-M_Me .Loader,
+.Chat-M_URS .Loader,
+.Info-BL_R,
+.Settings-CP_Cover .Settings-ChangeButtons .Button,
+.Settings-CP_Cover .Settings-ChangeButtons .ButtonDL,
+.UI-QuestionModal .Back,
+.Music-FullPlayer_BG_Blur,
+.GoldSub-User,
+.Music-NoneCover,
+.Dashboard-BottomBar {
+    background: rgba(255, 255, 255, 0.1); /* светлый прозрачный фон */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+/* Пример для кнопок с градиентом и эффектом стекла */
+
+.UI-Window_button,
+.UI-FormButton,
+.UI-AddPost .Buttons .Send,
+.UI-Send {
+    background: var(--GOLD_GRADIENT);
+    color: var(--BTN_TEXT_COLOR);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(250, 179, 30, 0.5);
+    transition: all 0.3s ease;
+}
+
+.UI-Window_button:hover,
+.UI-FormButton:hover,
+.UI-AddPost .Buttons .Send:hover {
+    outline: 2px solid rgba(238, 186, 133, 0.7);
+    outline-offset: 2px;
+    box-shadow: 0 6px 20px rgba(250, 179, 30, 0.7);
+}
+
+/* Текстовые поля с эффектом стекла */
+
+.UI-Input {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--TEXT_COLOR);
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: outline 0.3s ease;
+}
+
+.UI-Input:hover,
+.UI-Input:focus {
+    outline: 2px solid rgba(62, 62, 62, 0.8);
+    outline-offset: 2px;
+}
+
+/* Placeholder */
+
+input[type="text"]::-webkit-input-placeholder, 
+input[type="password"]::-webkit-input-placeholder, 
+textarea::-webkit-input-placeholder {
+    color: rgba(193, 192, 199, 0.7);
+}
+
+/* Ссылки с градиентом */
+
+a {
+    background-image: var(--GOLD_GRADIENT);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Логотип с эффектом стекла */
+
+.UI-Logo {
+    background-image: url('/static_sys/Images/GoldStar.svg');
+    filter: drop-shadow(0 0 6px rgba(250, 179, 30, 0.7));
+    -webkit-background-clip: unset;
+}
+
+/* Тени и прочее */
+
+.Post .InteractionButtons .Liked {
+    background: var(--GOLD_GRADIENT);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(250, 179, 30, 0.6);
+    border-radius: 8px;
+}
+
+.Post .InteractionButtons .Liked svg {
+    fill: #fff;
+}
+
+.Post .Image .Censoring, .Blur {
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* Медиа-запросы */
+
+@media only screen and (max-width: 768px) {
+    .UI-L_NAV button {
+        background: transparent;
+    }
+}
