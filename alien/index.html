@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="ru"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlienVanilla - лучший среди майнкрафт серверов!</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="nav">
+    <div class="logo">
+        <img src="images/637808085409071880.png" id="logo-img" hidden>
+        SPARK
+    </div>
+    <a href="#">
+        <img src="https://img.icons8.com/?size=100&id=z6m63h25vYs2&format=png&color=ffffff" id="home-img">
+        Главная
+    </a>
+    <a href="rules/index.html">
+        <img src="https://img.icons8.com/?size=100&id=PmjA5Nvb80LT&format=png&color=ffffff" id="book-img">
+        Правила
+    </a>
+    <a href="#">
+      <img src="https://img.icons8.com/?size=100&id=tL7D55BhC41z&format=png&color=ffffff" id="event-img">
+      Ивенты
+    </a>
+    <a href="#">
+      <img src="https://img.icons8.com/?size=100&id=59881&format=png&color=ffffff" id="info-img">
+      Вики
+    </a>
+</div>
+
+<div class="title">
+  <div class="tem">
+    <h1>Лучший</h1>
+  </div>
+  <h1 class="middle">Сервер minecraft</h1>
+  <div class="tem2">
+    <h1>Дружный</h1>
+  </div>
+</div>
+
+<div class="description">
+  <h3>Мы - дружная команда, старающаяся делать сервер лучше для вас каждый день, мы не идеальны, но стремимся к этому. Играй вместе со звездами - создавай собственное сияние</h3>
+</div>
+<div class="info">
+  <span class="version-img" id="version-skeleton"></span>
+  <img src="https://img.icons8.com/?size=30&id=59823&format=png&color=7f7f7f" id="version-img"> Рекомендуем: <span id="typing">1.16.5 </span>
+
+  <span class="java-img" id="java-skeleton"></span>
+  <img src="https://img.icons8.com/?size=100&id=sokzazCefFyW&format=png&color=7f7f7f" id="java-img"> Лицензия или пиратская версия
+</div>
+
+<div class="button-group">
+  <button class="button copy-btn" onclick="copyText('89.35.130.12:25720')">
+    Скопировать  IP
+  </button>
+
+  <button class="button copy-btn" onclick="window.open('http://eaglercraft.com/mc/connectto?wss://alien.org/', '_blank')">
+        <img src="https://img.icons8.com/?size=100&id=2963&format=png&color=ffffff" alt="map">
+  </button>
+
+  <button class="button telegram-btn" onclick="window.open('https://t.me/+e6JZ2gO_AaxjMzA0', '_blank')">
+    <img src="images/2111646.png" alt="telegram">
+  </button>
+</div>
+
+<div class="carousel">
+  <div class="photos">
+    <img src="sc/1.png">
+    <img src="sc/2.png">
+    <img src="sc/3.png">
+    <img src="sc/4.png">
+    <img src="sc/5.png">
+
+    <img src="sc/6.png">
+    <img src="sc/7.png">
+    <img src="sc/8.png">
+    
+  </div>
+</div>
+
+<div class="server-stats">
+  <div class="status">
+    <img id="server-icon" alt="server icon" width="40" height="40">
+    <span>Сервер: <b id="server-status">Загрузка...</b></span>
+  </div>
+  <div class="players">
+    <img src="https://img.icons8.com/?size=100&id=jqBrkphgtH8x&format=png&color=ffffff" alt="players">
+    <span>Онлайн: <b id="server-players">0/-1</b></span>
+  </div>
+</div>
+
+<script>
+function loadImage(imgId, skeletonId) {
+    const img = document.getElementById(imgId);
+    const skeleton = document.getElementById(skeletonId);
+
+    img.onload = () => {
+        skeleton.style.display = 'none';
+        img.style.display = 'inline-block';
+    };
+    img.onerror = () => {
+        console.log(`${imgId} не загрузилась`);
+    };
+}
+
+loadImage('logo-img', 'logo-skeleton');
+loadImage('home-img', 'home-skeleton');
+loadImage('book-img', 'book-skeleton');
+loadImage('event-img', 'event-skeleton');
+loadImage('info-img', 'info-skeleton');
+loadImage('version-img', 'version-skeleton');
+loadImage('java-img', 'java-skeleton');
+
+async function fetchServerStatus() {
+  try {
+  const response = await fetch("https://api.mcsrvstat.us/2/alien.minerent.net:25613");
+  const data = await response.json();
+
+  const statusEl = document.getElementById("server-status");
+  const playersEl = document.getElementById("server-players");
+  const iconEl = document.getElementById("server-icon");
+
+  if (data.online) {
+    statusEl.innerHTML = "<span style='background:#3dcc47;color:#fff;padding:3px 8px;border-radius:6px'>Работает</span>";
+    playersEl.textContent = `${data.players.online + 1}/${data.players.max}`;
+    if (data.icon) {
+      iconEl.src = data.icon;
+    } else {
+      iconEl.src = "https://minecraft.wiki/images/Golden_Apple_JE2_BE2.png?aa827";
+    }
+  } else {
+    statusEl.innerHTML = "<span style='background:#f44336;color:#fff;padding:3px 8px;border-radius:6px'>Выключен</span>";
+    playersEl.textContent = "0/0";
+    iconEl.src = "https://img.icons8.com/?size=100&id=jqBrkphgtH8x&format=png&color=000000";
+  }
+} catch (err) {
+  console.error("Ошибка получения статуса:", err);
+}
+
+}
+
+fetchServerStatus();
+setInterval(fetchServerStatus, 30000);
+
+
+fetchServerStatus();
+setInterval(fetchServerStatus, 30000);
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).catch(err => {
+      console.error("Ошибка копирования: ", err);
+    });
+  }
+</script>
+
+<script>
+  class TextTyper {
+      constructor(elementId, texts, options = {}) {
+          this.element = document.getElementById(elementId);
+          this.texts = texts;
+          this.options = {
+              typingSpeed: 100,       // скорость печатания (мс)
+              deletingSpeed: 50,      // скорость удаления (мс)
+              pauseBetween: 2000,     // пауза между словами (мс)
+              loop: true,             // зациклить анимацию
+              ...options
+          };
+          
+          this.currentTextIndex = 0;
+          this.isDeleting = false;
+          this.text = '';
+          this.tick();
+      }
+      
+      tick() {
+          const currentText = this.texts[this.currentTextIndex];
+          
+          if (this.isDeleting) {
+              // Удаляем текст
+              this.text = currentText.substring(0, this.text.length - 1);
+          } else {
+              // Печатаем текст
+              this.text = currentText.substring(0, this.text.length + 1);
+          }
+          
+          this.element.textContent = this.text;
+          
+          let delta = this.isDeleting ? this.options.deletingSpeed : this.options.typingSpeed;
+          
+          if (!this.isDeleting && this.text === currentText) {
+              // Текст напечатан полностью
+              delta = this.options.pauseBetween;
+              this.isDeleting = true;
+          } else if (this.isDeleting && this.text === '') {
+              // Текст полностью удален
+              this.isDeleting = false;
+              this.currentTextIndex++;
+              
+              if (this.currentTextIndex >= this.texts.length) {
+                  if (this.options.loop) {
+                      this.currentTextIndex = 0;
+                  } else {
+                      return; // Останавливаем анимацию
+                  }
+              }
+              delta = 500; // Пауза перед началом нового слова
+          }
+          
+          setTimeout(() => this.tick(), delta);
+      }
+  }
+  
+  // Использование:
+  document.addEventListener('DOMContentLoaded', function() {
+      const texts = [
+          "1.16.5",
+          "1.12.2",
+          "1.18.2",
+          "1.21.1",
+          "1.20.4"
+      ];
+      
+      new TextTyper('typing', texts, {
+          typingSpeed: 100,
+          deletingSpeed: 50,
+          pauseBetween: 2000,
+          loop: true
+      });
+  });
+</script>
+
+
+
+
+
+
+
+
+</body></html>
