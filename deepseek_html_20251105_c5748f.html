@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steal it All - Админ Панель</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --discord-dark: #36393f;
+            --discord-darker: #2f3136;
+            --discord-darkest: #202225;
+            --discord-text: #dcddde;
+            --discord-blue: #5865f2;
+            --discord-green: #57f287;
+            --discord-red: #ed4245;
+        }
+        
+        body {
+            background-color: var(--discord-dark);
+            color: var(--discord-text);
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        .console-output {
+            height: 50vh;
+            overflow-y: auto;
+            background-color: var(--discord-darker);
+        }
+        
+        .suggestions {
+            background-color: var(--discord-darker);
+            border: 1px solid var(--discord-darkest);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .suggestion-item {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--discord-darkest);
+        }
+        
+        .suggestion-item:hover, .suggestion-item.active {
+            background-color: var(--discord-blue);
+        }
+        
+        .command {
+            color: var(--discord-green);
+        }
+        
+        .response {
+            color: #ffffff;
+        }
+        
+        .error {
+            color: var(--discord-red);
+        }
+        
+        .regedit-panel {
+            background-color: var(--discord-darker);
+            border: 1px solid var(--discord-darkest);
+        }
+        
+        .regedit-tab {
+            background-color: var(--discord-dark);
+            border-bottom: 2px solid transparent;
+        }
+        
+        .regedit-tab.active {
+            border-bottom-color: var(--discord-blue);
+        }
+        
+        .regedit-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--discord-darkest);
+        }
+        
+        .regedit-item:hover {
+            background-color: rgba(79, 84, 92, 0.16);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="flex h-screen">
+        <!-- Боковая панель в стиле Discord -->
+        <div class="w-16 bg-gray-900 flex flex-col items-center py-3 space-y-4">
+            <div class="bg-indigo-600 text-white p-3 rounded-full">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <div class="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white">
+                <i class="fas fa-terminal"></i>
+            </div>
+            <div class="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white">
+                <i class="fas fa-database"></i>
+            </div>
+        </div>
+        
+        <!-- Основной контент -->
+        <div class="flex-1 flex flex-col">
+            <!-- Верхняя панель -->
+            <header class="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-900">
+                <h1 class="text-xl font-bold">Steal it All - Админ Панель</h1>
+                <div class="flex space-x-2">
+                    <button id="consoleTab" class="px-4 py-2 bg-indigo-600 rounded-lg text-white font-medium">Консоль</button>
+                    <button id="regeditTab" class="px-4 py-2 bg-gray-700 rounded-lg text-white font-medium">Реестр</button>
+                </div>
+            </header>
+            
+            <!-- Контент -->
+            <div class="flex-1 p-4 overflow-auto">
+                <!-- Панель консоли -->
+                <div id="consolePanel" class="h-full flex flex-col">
+                    <div class="console-output rounded-lg p-4 mb-4 font-mono text-sm" id="consoleOutput">
+                        <div class="response">> Добро пожаловать в админ-панель Steal it All</div>
+                        <div class="response">> Введите команду или начните печатать для подсказок</div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="flex">
+                            <span class="bg-gray-700 border border-r-0 border-gray-600 rounded-l-lg px-3 py-2">></span>
+                            <input 
+                                type="text" 
+                                id="commandInput" 
+                                class="bg-gray-700 flex-1 rounded-r-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+                                placeholder="Введите команду..."
+                                autocomplete="off"
+                            >
+                        </div>
+                        
+                        <div id="suggestions" class="suggestions absolute bottom-full left-0 right-0 rounded-lg mb-1 hidden font-mono text-sm"></div>
+                    </div>
+                    
+                    <div class="mt-4 text-xs text-gray-400">
+                        <div>Доступные команды: spawn, rc, getip, setreb, setgloballuck, ban, getplayerid, rct spawn, getplayerserv</div>
+                        <div>Используйте Tab для автодополнения, ↑↓ для навигации по подсказкам</div>
+                    </div>
+                </div>
+                
+                <!-- Панель реестра -->
+                <div id="regeditPanel" class="h-full flex-col hidden">
+                    <div class="flex space-x-1 mb-4">
+                        <button class="regedit-tab active px-4 py-2 rounded-t-lg" data-tab="brainrots">Brainrots</button>
+                        <button class="regedit-tab px-4 py-2 rounded-t-lg" data-tab="events">Events</button>
+                        <button class="regedit-tab px-4 py-2 rounded-t-lg" data-tab="locals">Locals</button>
+                    </div>
+                    
+                    <div class="regedit-panel rounded-lg rounded-tl-none overflow-hidden flex-1 flex flex-col">
+                        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                            <h3 class="font-medium" id="regeditTitle">Brainrots</h3>
+                            <div class="flex space-x-2">
+                                <button id="newFolderBtn" class="px-3 py-1 bg-indigo-600 rounded text-sm">
+                                    <i class="fas fa-folder-plus mr-1"></i> Новая папка
+                                </button>
+                                <button id="newValueBtn" class="px-3 py-1 bg-green-600 rounded text-sm">
+                                    <i class="fas fa-plus mr-1"></i> Новое значение
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1 overflow-auto p-2" id="regeditContent">
+                            <!-- Содержимое реестра будет генерироваться динамически -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные команд
+        const commands = [
+            {
+                name: "spawn",
+                description: "Создать предмет",
+                syntax: "spawn <def/gold/diam/rb> или <rare/cmn/myth/leg> {сервер}",
+                examples: ["spawn def", "spawn gold 2", "spawn rare", "spawn myth 3"]
+            },
+            {
+                name: "rc",
+                description: "Редактировать RC",
+                syntax: "rc <1/2/3>",
+                examples: ["rc 1", "rc 2", "rc 3"]
+            },
+            {
+                name: "getip",
+                description: "Получить IP игрока",
+                syntax: "getip <serverid> <player>",
+                examples: ["getip 1 Player123", "getip 2 SomeUser"]
+            },
+            {
+                name: "setreb",
+                description: "Установить rebirth",
+                syntax: "setreb <serverid> <player>",
+                examples: ["setreb 1 Player123", "setreb 2 SomeUser"]
+            },
+            {
+                name: "setgloballuck",
+                description: "Установить глобальный luck",
+                syntax: "setgloballuck <2x/4x/6x/8x/10x/12x> <servername> {сервер}",
+                examples: ["setgloballuck 2x Server1", "setgloballuck 6x Server2 3"]
+            },
+            {
+                name: "ban",
+                description: "Забанить игрока",
+                syntax: "ban <playerid>",
+                examples: ["ban 12345", "ban 67890"]
+            },
+            {
+                name: "getplayerid",
+                description: "Получить ID игрока",
+                syntax: "getplayerid <server> <player>",
+                examples: ["getplayerid 1 Player123", "getplayerid 2 SomeUser"]
+            },
+            {
+                name: "getplayerserv",
+                description: "Получить сервер игрока",
+                syntax: "getplayerserv <playerid>",
+                examples: ["getplayerserv 12345", "getplayerserv 67890"]
+            },
+            {
+                name: "rct spawn",
+                description: "RCT spawn",
+                syntax: "rct spawn <ab1/c1/do2>",
+                examples: ["rct spawn ab1", "rct spawn c1", "rct spawn do2"]
+            }
+        ];
+
+        // Данные реестра
+        let regeditData = {
+            brainrots: {
+                "Настройки": {
+                    "type": "folder",
+                    "items": {
+                        "Макс. игроков": { "type": "value", "data": "50" },
+                        "Режим игры": { "type": "value", "data": "Steal" }
+                    }
+                },
+                "Логи": {
+                    "type": "folder",
+                    "items": {
+                        "Последняя активность": { "type": "value", "data": "2023-10-15 14:30" }
+                    }
+                }
+            },
+            events: {
+                "Активные": {
+                    "type": "folder",
+                    "items": {
+                        "Хэллоуин": { "type": "value", "data": "true" },
+                        "Рождество": { "type": "value", "data": "false" }
+                    }
+                }
+            },
+            locals: {
+                "Конфигурация": {
+                    "type": "folder",
+                    "items": {
+                        "Язык": { "type": "value", "data": "ru" },
+                        "Регион": { "type": "value", "data": "EU" }
+                    }
+                }
+            }
+        };
+
+        // Загрузка данных из localStorage при запуске
+        function loadRegeditData() {
+            const saved = localStorage.getItem('stealitall_regedit');
+            if (saved) {
+                regeditData = JSON.parse(saved);
+            }
+        }
+
+        // Сохранение данных в localStorage
+        function saveRegeditData() {
+            localStorage.setItem('stealitall_regedit', JSON.stringify(regeditData));
+        }
+
+        // Элементы DOM
+        const consoleOutput = document.getElementById('consoleOutput');
+        const commandInput = document.getElementById('commandInput');
+        const suggestions = document.getElementById('suggestions');
+        const consolePanel = document.getElementById('consolePanel');
+        const regeditPanel = document.getElementById('regeditPanel');
+        const consoleTab = document.getElementById('consoleTab');
+        const regeditTab = document.getElementById('regeditTab');
+        const regeditContent = document.getElementById('regeditContent');
+        const regeditTitle = document.getElementById('regeditTitle');
+        const newFolderBtn = document.getElementById('newFolderBtn');
+        const newValueBtn = document.getElementById('newValueBtn');
+        const regeditTabs = document.querySelectorAll('.regedit-tab');
+        
+        let currentSuggestions = [];
+        let selectedSuggestionIndex = -1;
+        let currentRegeditTab = 'brainrots';
+
+        // Инициализация
+        function init() {
+            loadRegeditData();
+            setupEventListeners();
+            renderRegeditTab(currentRegeditTab);
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Переключение между консолью и реестром
+            consoleTab.addEventListener('click', () => {
+                consolePanel.classList.remove('hidden');
+                regeditPanel.classList.add('hidden');
+                consoleTab.classList.add('bg-indigo-600');
+                consoleTab.classList.remove('bg-gray-700');
+                regeditTab.classList.add('bg-gray-700');
+                regeditTab.classList.remove('bg-indigo-600');
+            });
+            
+            regeditTab.addEventListener('click', () => {
+                consolePanel.classList.add('hidden');
+                regeditPanel.classList.remove('hidden');
+                regeditTab.classList.add('bg-indigo-600');
+                regeditTab.classList.remove('bg-gray-700');
+                consoleTab.classList.add('bg-gray-700');
+                consoleTab.classList.remove('bg-indigo-600');
+            });
+            
+            // Переключение вкладок реестра
+            regeditTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    regeditTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentRegeditTab = tab.dataset.tab;
+                    regeditTitle.textContent = tab.textContent;
+                    renderRegeditTab(currentRegeditTab);
+                });
+            });
+            
+            // Кнопки создания в реестре
+            newFolderBtn.addEventListener('click', createNewFolder);
+            newValueBtn.addEventListener('click', createNewValue);
+            
+            // Обработчики для консоли
+            commandInput.addEventListener('input', (e) => {
+                showSuggestions(e.target.value);
+            });
+
+            commandInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    executeCommand();
+                }
+                else if (e.key === 'Tab') {
+                    e.preventDefault();
+                    if (currentSuggestions.length > 0) {
+                        const index = selectedSuggestionIndex >= 0 ? selectedSuggestionIndex : 0;
+                        selectSuggestion(index);
+                    }
+                }
+                else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (currentSuggestions.length > 0) {
+                        selectedSuggestionIndex = (selectedSuggestionIndex + 1) % currentSuggestions.length;
+                        updateSuggestionSelection();
+                    }
+                }
+                else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (currentSuggestions.length > 0) {
+                        selectedSuggestionIndex = selectedSuggestionIndex <= 0 ? currentSuggestions.length - 1 : selectedSuggestionIndex - 1;
+                        updateSuggestionSelection();
+                    }
+                }
+                else if (e.key === 'Escape') {
+                    suggestions.classList.add('hidden');
+                }
+            });
+
+            // Скрыть подсказки при клике вне
+            document.addEventListener('click', (e) => {
+                if (!commandInput.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.classList.add('hidden');
+                }
+            });
+            
+            // Фокус на поле ввода при загрузке
+            commandInput.focus();
+        }
+
+        // Поиск подсказок
+        function findSuggestions(input) {
+            if (!input.trim()) return [];
+            
+            const inputParts = input.toLowerCase().split(' ');
+            const matchedCommands = [];
+            
+            commands.forEach(cmd => {
+                const cmdParts = cmd.name.toLowerCase().split(' ');
+                
+                // Проверяем совпадение по началу команды
+                let matches = true;
+                for (let i = 0; i < inputParts.length; i++) {
+                    if (i >= cmdParts.length || !cmdParts[i].startsWith(inputParts[i])) {
+                        matches = false;
+                        break;
+                    }
+                }
+                
+                if (matches) {
+                    matchedCommands.push({
+                        type: 'command',
+                        display: cmd.name,
+                        description: cmd.description,
+                        syntax: cmd.syntax,
+                        examples: cmd.examples
+                    });
+                }
+                
+                // Добавляем примеры для уже выбранной команды
+                if (inputParts[0] === cmdParts[0] && cmd.examples) {
+                    cmd.examples.forEach(example => {
+                        if (example.toLowerCase().startsWith(input.toLowerCase())) {
+                            matchedCommands.push({
+                                type: 'example',
+                                display: example,
+                                description: `Пример: ${cmd.description}`
+                            });
+                        }
+                    });
+                }
+            });
+            
+            return matchedCommands;
+        }
+
+        // Показать подсказки
+        function showSuggestions(input) {
+            currentSuggestions = findSuggestions(input);
+            selectedSuggestionIndex = -1;
+            
+            if (currentSuggestions.length === 0) {
+                suggestions.classList.add('hidden');
+                return;
+            }
+            
+            suggestions.innerHTML = '';
+            currentSuggestions.forEach((suggestion, index) => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.innerHTML = `
+                    <div class="font-medium">${suggestion.display}</div>
+                    <div class="text-gray-400 text-xs">${suggestion.description}</div>
+                    ${suggestion.syntax ? `<div class="text-gray-500 text-xs">${suggestion.syntax}</div>` : ''}
+                `;
+                div.addEventListener('click', () => selectSuggestion(index));
+                suggestions.appendChild(div);
+            });
+            
+            suggestions.classList.remove('hidden');
+        }
+
+        // Выбрать подсказку
+        function selectSuggestion(index) {
+            selectedSuggestionIndex = index;
+            const suggestion = currentSuggestions[index];
+            commandInput.value = suggestion.display + ' ';
+            suggestions.classList.add('hidden');
+            commandInput.focus();
+        }
+
+        // Обновить выделение подсказки
+        function updateSuggestionSelection() {
+            const items = suggestions.querySelectorAll('.suggestion-item');
+            items.forEach((item, index) => {
+                item.classList.toggle('active', index === selectedSuggestionIndex);
+            });
+        }
+
+        // Генерация случайного IP
+        function generateRandomIP() {
+            return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+        }
+
+        // Генерация случайного ID
+        function generateRandomId() {
+            return Math.random().toString(36).substring(2, 10).toUpperCase();
+        }
+
+        // Обработка команды
+        function processCommand(input) {
+            const parts = input.split(' ');
+            const commandName = parts[0].toLowerCase();
+            
+            if (commandName === 'spawn') {
+                const item = parts[1] || 'def';
+                const serverId = parts[2] || '1';
+                return `Sucesfully spawned random ${item} (at ${serverId})`;
+            }
+            else if (commandName === 'rc') {
+                const value = parts[1] || '1';
+                return `rc edit ${value}`;
+            }
+            else if (commandName === 'getip') {
+                const serverId = parts[1] || '1';
+                const player = parts[2] || 'Player';
+                return `Ip of player ${player} is ${generateRandomIP()}`;
+            }
+            else if (commandName === 'setreb') {
+                const serverId = parts[1] || '1';
+                const player = parts[2] || 'Player';
+                return `Set rebirth of ${player} at ${serverId}`;
+            }
+            else if (commandName === 'setgloballuck') {
+                const value = parts[1] || '2x';
+                const serverName = parts[2] || 'Server1';
+                const serverId = parts[3] || '1';
+                return `luck set ${value} (at ${serverId})`;
+            }
+            else if (commandName === 'ban') {
+                const playerId = parts[1] || 'Unknown';
+                return `ban ${playerId}`;
+            }
+            else if (commandName === 'getplayerid') {
+                const server = parts[1] || '1';
+                const player = parts[2] || 'Player';
+                return `playerid: ${generateRandomId()} for player ${player}`;
+            }
+            else if (commandName === 'getplayerserv') {
+                const playerId = parts[1] || 'Unknown';
+                const server = Math.floor(Math.random() * 35) + 1;
+                return `Player ${playerId} is on server ${server}`;
+            }
+            else if (commandName === 'rct' && parts[1] === 'spawn') {
+                return "Its not admin abuse time!";
+            }
+            
+            return `Ошибка: команда "${commandName}" не найдена`;
+        }
+
+        // Выполнить команду
+        function executeCommand() {
+            const input = commandInput.value.trim();
+            if (!input) return;
+            
+            // Добавляем ввод пользователя
+            const userInput = document.createElement('div');
+            userInput.className = 'command';
+            userInput.textContent = `> ${input}`;
+            consoleOutput.appendChild(userInput);
+            
+            // Обрабатываем команду
+            const response = processCommand(input);
+            const responseElement = document.createElement('div');
+            responseElement.className = response.startsWith('Ошибка') ? 'error' : 'response';
+            responseElement.textContent = `> ${response}`;
+            consoleOutput.appendChild(responseElement);
+            
+            // Очищаем поле ввода
+            commandInput.value = '';
+            suggestions.classList.add('hidden');
+            
+            // Прокручиваем вниз
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Отображение вкладки реестра
+        function renderRegeditTab(tabName) {
+            const data = regeditData[tabName];
+            regeditContent.innerHTML = '';
+            
+            if (Object.keys(data).length === 0) {
+                regeditContent.innerHTML = '<div class="p-4 text-center text-gray-500">Папка пуста</div>';
+                return;
+            }
+            
+            for (const [key, value] of Object.entries(data)) {
+                const item = document.createElement('div');
+                item.className = 'regedit-item flex items-center';
+                
+                if (value.type === 'folder') {
+                    item.innerHTML = `
+                        <i class="fas fa-folder text-yellow-500 mr-2"></i>
+                        <span class="flex-1">${key}</span>
+                        <button class="text-red-500 hover:text-red-400 delete-item" data-key="${key}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    
+                    // Обработчик для открытия папки
+                    item.addEventListener('dblclick', () => {
+                        renderFolderContent(tabName, key, value);
+                    });
+                } else {
+                    item.innerHTML = `
+                        <i class="fas fa-file text-blue-500 mr-2"></i>
+                        <span class="flex-1">${key}</span>
+                        <span class="text-gray-400 mr-2">${value.data}</span>
+                        <button class="text-red-500 hover:text-red-400 delete-item" data-key="${key}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    
+                    // Обработчик для редактирования значения
+                    item.addEventListener('dblclick', () => {
+                        editValue(tabName, key, value);
+                    });
+                }
+                
+                regeditContent.appendChild(item);
+            }
+            
+            // Добавляем обработчики для кнопок удаления
+            document.querySelectorAll('.delete-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const key = btn.dataset.key;
+                    deleteRegeditItem(tabName, key);
+                });
+            });
+        }
+
+        // Отображение содержимого папки
+        function renderFolderContent(tabName, folderName, folderData) {
+            regeditTitle.textContent = `${regeditTitle.textContent} / ${folderName}`;
+            regeditContent.innerHTML = '';
+            
+            // Кнопка "Назад"
+            const backBtn = document.createElement('div');
+            backBtn.className = 'regedit-item flex items-center cursor-pointer';
+            backBtn.innerHTML = `
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Назад</span>
+            `;
+            backBtn.addEventListener('click', () => {
+                renderRegeditTab(tabName);
+                regeditTitle.textContent = document.querySelector(`[data-tab="${tabName}"]`).textContent;
+            });
+            regeditContent.appendChild(backBtn);
+            
+            // Содержимое папки
+            for (const [key, value] of Object.entries(folderData.items)) {
+                const item = document.createElement('div');
+                item.className = 'regedit-item flex items-center';
+                
+                item.innerHTML = `
+                    <i class="fas fa-file text-blue-500 mr-2"></i>
+                    <span class="flex-1">${key}</span>
+                    <span class="text-gray-400 mr-2">${value.data}</span>
+                    <button class="text-red-500 hover:text-red-400 delete-folder-item" data-key="${key}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                
+                // Обработчик для редактирования значения
+                item.addEventListener('dblclick', () => {
+                    editFolderValue(tabName, folderName, key, value);
+                });
+                
+                regeditContent.appendChild(item);
+            }
+            
+            // Добавляем обработчики для кнопок удаления
+            document.querySelectorAll('.delete-folder-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const key = btn.dataset.key;
+                    deleteFolderItem(tabName, folderName, key);
+                });
+            });
+        }
+
+        // Создание новой папки
+        function createNewFolder() {
+            const name = prompt('Введите название новой папки:');
+            if (name && name.trim()) {
+                if (!regeditData[currentRegeditTab][name]) {
+                    regeditData[currentRegeditTab][name] = {
+                        type: 'folder',
+                        items: {}
+                    };
+                    saveRegeditData();
+                    renderRegeditTab(currentRegeditTab);
+                } else {
+                    alert('Папка с таким именем уже существует!');
+                }
+            }
+        }
+
+        // Создание нового значения
+        function createNewValue() {
+            const name = prompt('Введите название нового значения:');
+            if (name && name.trim()) {
+                if (!regeditData[currentRegeditTab][name]) {
+                    const value = prompt('Введите значение:');
+                    if (value !== null) {
+                        regeditData[currentRegeditTab][name] = {
+                            type: 'value',
+                            data: value
+                        };
+                        saveRegeditData();
+                        renderRegeditTab(currentRegeditTab);
+                    }
+                } else {
+                    alert('Значение с таким именем уже существует!');
+                }
+            }
+        }
+
+        // Редактирование значения
+        function editValue(tabName, key, value) {
+            const newValue = prompt(`Введите новое значение для ${key}:`, value.data);
+            if (newValue !== null) {
+                regeditData[tabName][key].data = newValue;
+                saveRegeditData();
+                renderRegeditTab(tabName);
+            }
+        }
+
+        // Редактирование значения в папке
+        function editFolderValue(tabName, folderName, key, value) {
+            const newValue = prompt(`Введите новое значение для ${key}:`, value.data);
+            if (newValue !== null) {
+                regeditData[tabName][folderName].items[key].data = newValue;
+                saveRegeditData();
+                renderFolderContent(tabName, folderName, regeditData[tabName][folderName]);
+            }
+        }
+
+        // Удаление элемента реестра
+        function deleteRegeditItem(tabName, key) {
+            if (confirm(`Вы уверены, что хотите удалить "${key}"?`)) {
+                delete regeditData[tabName][key];
+                saveRegeditData();
+                renderRegeditTab(tabName);
+            }
+        }
+
+        // Удаление элемента из папки
+        function deleteFolderItem(tabName, folderName, key) {
+            if (confirm(`Вы уверены, что хотите удалить "${key}"?`)) {
+                delete regeditData[tabName][folderName].items[key];
+                saveRegeditData();
+                renderFolderContent(tabName, folderName, regeditData[tabName][folderName]);
+            }
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
