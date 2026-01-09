@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend of AFK | Хоррор игра</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Eater&family=MedievalSharp&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+        <!-- Метаданные для SEO и соцсетей -->
+        <meta name="description" content="Legend of AFK - хоррор игра в жанре survival horror с уникальной механикой галлюцинаций при бездействии. Заброшенная психиатрическая больница, кошмары и борьба за рассудок.">
+        <meta name="keywords" content="хоррор игра, survival horror, Legend of AFK, психологический ужас, галлюцинации, indie игра, хоррор 2024">
+        <meta name="author" content="Legend of AFK Development Team">
+        
+        <!-- Open Graph метатеги для соцсетей -->
+        <meta property="og:title" content="Legend of AFK | Хоррор игра выживания">
+        <meta property="og:description" content="Чем дольше вы бездействуете, тем сильнее галлюцинации. Сможете ли вы сохранить рассудок?">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://legendoafk.com">
+        <meta property="og:image" content="https://legendoafk.com/images/og-preview.jpg">
+        
+        <!-- Twitter Card метатеги -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Legend of AFK | Хоррор игра">
+        <meta name="twitter:description" content="Every man deserves to try hallucinations. Готовьтесь к осени 2024.">
+        
+        <!-- Иконки сайта -->
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😱</text></svg>">
+        <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😱</text></svg>">
+        
+        <!-- Цвет браузера мобильных устройств -->
+        <meta name="theme-color" content="#0a0a0a">
+        
+        <!-- Предзагрузка шрифтов -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Eater&family=MedievalSharp&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+        
+        <!-- Структурированные данные для поисковых систем -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          "name": "Legend of AFK",
+          "description": "Хоррор игра в жанре survival horror с уникальной механикой галлюцинаций при бездействии",
+          "genre": ["Horror", "Survival", "Indie"],
+          "gamePlatform": "PC",
+          "applicationCategory": "Game",
+          "operatingSystem": "Windows",
+          "releaseDate": "2024-10-31",
+          "author": {
+            "@type": "Organization",
+            "name": "Legend of AFK Development Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Legend of AFK"
+          },
+          "screenshot": [
+            "https://legendoafk.com/images/screenshot1.jpg",
+            "https://legendoafk.com/images/screenshot2.jpg",
+            "https://legendoafk.com/images/screenshot3.jpg"
+          ]
+        }
+        </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #c0c0c0;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        
+        /* Кровавый фон */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(100, 0, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(80, 0, 0, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(60, 0, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(20, 0, 0, 0.9) 0%, rgba(10, 0, 0, 0.95) 100%);
+            z-index: -2;
+        }
+        
+        /* Эффект старых фильмов */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15) 0px,
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                ),
+                radial-gradient(ellipse at 30% 20%, rgba(100, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(80, 0, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Кровавые потеки */
+        .blood-drip {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        .drip {
+            position: absolute;
+            background: linear-gradient(to bottom, rgba(100, 0, 0, 0.7) 0%, rgba(60, 0, 0, 0.4) 70%, transparent 100%);
+            width: 8px;
+            border-radius: 0 0 4px 4px;
+            transform-origin: top;
+        }
+        
+        .drip-1 { left: 15%; height: 40%; animation: drip-fall 20s infinite; }
+        .drip-2 { left: 30%; height: 60%; animation: drip-fall 25s infinite 3s; }
+        .drip-3 { left: 50%; height: 35%; animation: drip-fall 18s infinite 7s; }
+        .drip-4 { left: 70%; height: 55%; animation: drip-fall 22s infinite 5s; }
+        .drip-5 { left: 85%; height: 45%; animation: drip-fall 30s infinite 10s; }
+        
+        @keyframes drip-fall {
+            0% { height: 0; opacity: 0; }
+            10% { height: 10%; opacity: 1; }
+            20% { height: 20%; }
+            30% { height: 30%; }
+            40% { height: 40%; }
+            50% { height: 50%; }
+            60% { height: 60%; }
+            70% { height: 70%; opacity: 1; }
+            80% { height: 80%; opacity: 0.8; }
+            90% { height: 90%; opacity: 0.5; }
+            100% { height: 100%; opacity: 0; }
+        }
+        
+        /* Кровавые брызги */
+        .blood-splatter {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.2;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(120, 0, 0, 0.4) 1px, transparent 2px),
+                radial-gradient(circle at 90% 30%, rgba(100, 0, 0, 0.3) 1px, transparent 2px),
+                radial-gradient(circle at 40% 70%, rgba(80, 0, 0, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 70% 80%, rgba(90, 0, 0, 0.3) 1px, transparent 2px),
+                radial-gradient(circle at 20% 50%, rgba(110, 0, 0, 0.4) 2px, transparent 3px);
+            background-size: 200px 200px, 300px 300px, 250px 250px, 400px 400px, 350px 350px;
+        }
+        
+        /* Эффект мерцания */
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            5% { opacity: 0.9; }
+            10% { opacity: 0.87; }
+            15% { opacity: 0.95; }
+            20% { opacity: 0.92; }
+            25% { opacity: 0.98; }
+            30% { opacity: 1; }
+            35% { opacity: 0.9; }
+            40% { opacity: 0.85; }
+            45% { opacity: 0.95; }
+            50% { opacity: 0.88; }
+            55% { opacity: 0.92; }
+            60% { opacity: 0.99; }
+            65% { opacity: 0.9; }
+            70% { opacity: 0.93; }
+            75% { opacity: 0.97; }
+            80% { opacity: 0.89; }
+            85% { opacity: 0.94; }
+            90% { opacity: 0.91; }
+            95% { opacity: 0.98; }
+            100% { opacity: 0.96; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            animation: flicker 0.3s infinite;
+        }
+        
+        /* Секция заголовка */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid #500;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 0 10px rgba(100, 0, 0, 0.7);
+        }
+        
+        /* Эффект печатания для заголовка */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #a00; }
+        }
+        
+        .title {
+            font-size: 5rem;
+            color: #900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 4px solid #a00;
+            width: 0;
+            animation: 
+                typing 3.5s steps(15, end) forwards,
+                blink-caret .75s step-end infinite;
+            font-family: 'Eater', cursive;
+            text-shadow: 3px 3px 0 #300, 6px 6px 10px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Задержка анимации для подзаголовка */
+        .subtitle {
+            font-size: 2.5rem;
+            color: #b8860b;
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 3.5s;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .subtitle span {
+            color: #a00;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(160, 0, 0, 0.9);
+            font-family: 'Creepster', cursive;
+            letter-spacing: 1px;
+        }
+        
+        /* Описание игры */
+        .description {
+            background-color: rgba(10, 0, 0, 0.85);
+            border: 1px solid #500;
+            padding: 40px;
+            margin: 40px 0;
+            line-height: 1.8;
+            font-size: 1.3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 2s forwards;
+            animation-delay: 4.5s;
+            box-shadow: 0 0 30px rgba(100, 0, 0, 0.5), inset 0 0 20px rgba(50, 0, 0, 0.7);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .description::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #a00, transparent);
+        }
+        
+        .description p {
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Галерея */
+        .gallery-section {
+            margin: 60px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 2s forwards;
+            animation-delay: 5.5s;
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            color: #b8860b;
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #500;
+            font-family: 'MedievalSharp', cursive;
+            text-shadow: 0 0 10px rgba(184, 134, 11, 0.5);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #a00, transparent);
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .gallery-item {
+            background-color: #111;
+            border: 2px solid #500;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            border-radius: 3px;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05) rotate(1deg);
+            border-color: #a00;
+            box-shadow: 0 0 25px rgba(160, 0, 0, 0.7);
+            z-index: 10;
+        }
+        
+        .gallery-placeholder {
+            color: #666;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .gallery-item:nth-child(odd):hover {
+            transform: scale(1.05) rotate(-1deg);
+        }
+        
+        /* Кровавый эффект при наведении на галерею */
+        .gallery-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 60%, rgba(100, 0, 0, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+        
+        /* Информация о релизе */
+        .release-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 60px 0;
+            padding: 40px;
+            background-color: rgba(20, 0, 0, 0.85);
+            border: 2px solid #a00;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 2s forwards;
+            animation-delay: 6.5s;
+            border-radius: 5px;
+            box-shadow: 0 0 30px rgba(100, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .release-info::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(100, 0, 0, 0.1), transparent);
+            pointer-events: none;
+        }
+        
+        .telegram-channel, .release-date {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .telegram-channel a {
+            display: inline-flex;
+            align-items: center;
+            color: #0088cc;
+            text-decoration: none;
+            font-size: 1.6rem;
+            transition: all 0.3s;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        
+        .telegram-channel a:hover {
+            color: #00bfff;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .telegram-icon {
+            font-size: 3rem;
+            margin-right: 20px;
+        }
+        
+        .release-date h3 {
+            color: #b8860b;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .date {
+            font-size: 2.8rem;
+            color: #a00;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(160, 0, 0, 0.7);
+            font-family: 'Eater', cursive;
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+        
+        /* Пульсация даты релиза */
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(160, 0, 0, 0.7); }
+            50% { text-shadow: 0 0 20px rgba(160, 0, 0, 0.9), 0 0 30px rgba(160, 0, 0, 0.5); }
+            100% { text-shadow: 0 0 10px rgba(160, 0, 0, 0.7); }
+        }
+        
+        .date {
+            animation: pulse 3s infinite;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+                letter-spacing: 3px;
+            }
+            
+            .subtitle {
+                font-size: 1.8rem;
+            }
+            
+            .release-info {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .description {
+                padding: 25px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Эффект помех внизу */
+        .static-effect {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(transparent, rgba(255, 0, 0, 0.03), rgba(255, 0, 0, 0.05));
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Дополнительный страшный элемент - летучие мыши */
+        .bat {
+            position: fixed;
+            color: rgba(50, 0, 0, 0.7);
+            font-size: 2rem;
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .bat-1 {
+            top: 10%;
+            left: 5%;
+            animation: fly1 30s infinite linear;
+        }
+        
+        .bat-2 {
+            top: 20%;
+            right: 10%;
+            animation: fly2 25s infinite linear;
+        }
+        
+        @keyframes fly1 {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(100px) translateY(50px); }
+            50% { transform: translateX(200px) translateY(0); }
+            75% { transform: translateX(100px) translateY(-50px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        
+        @keyframes fly2 {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-150px) translateY(30px); }
+            50% { transform: translateX(-300px) translateY(0); }
+            75% { transform: translateX(-150px) translateY(-30px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        
+        /* Эффект паранойи - глаза в темноте */
+        .eye {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at 30% 30%, #a00 0%, #500 70%, transparent 100%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 0 15px rgba(160, 0, 0, 0.7);
+            transition: opacity 0.5s;
+        }
+        
+        /* Эффект мигания */
+        @keyframes blink {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+        
+        /* Футер */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 1px solid #500;
+            font-size: 1rem;
+            color: #666;
+            font-family: 'Cinzel Decorative', serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Кровавые потеки -->
+    <div class="blood-drip">
+        <div class="drip drip-1"></div>
+        <div class="drip drip-2"></div>
+        <div class="drip drip-3"></div>
+        <div class="drip drip-4"></div>
+        <div class="drip drip-5"></div>
+    </div>
+    
+    <!-- Кровавые брызги -->
+    <div class="blood-splatter"></div>
+    
+    <!-- Летучие мыши -->
+    <div class="bat bat-1"><i class="fas fa-bat"></i></div>
+    <div class="bat bat-2"><i class="fas fa-bat"></i></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Legend of AFK</h1>
+            <h2 class="subtitle">every man deserves to try <span>hallucinations</span></h2>
+        </header>
+        
+        <section class="description">
+            <p>Добро пожаловать в мир "Legend of AFK" — хоррор-игру, где реальность переплетается с кошмаром, а граница между вымыслом и действительностью стирается.</p>
+            <p>Вы играете за человека, который оказался в заброшенном психиатрическом учреждении, где когда-то проводились запрещенные эксперименты над пациентами. Теперь это место населено призраками прошлого и ужасами, рожденными больным разумом.</p>
+            <p>Особенность игры в том, что чем дольше вы бездействуете (AFK), тем сильнее становятся галлюцинации и тем агрессивнее ведут себя существа. Но и активные действия не гарантируют безопасности — каждый звук, каждый шаг могут привлечь внимание чего-то ужасного.</p>
+            <p>Сможете ли вы сохранить рассудок и выбраться из этого ада? Или навсегда станете частью легенды об AFK?</p>
+        </section>
+        
+        <section class="gallery-section">
+            <h2 class="section-title">Галерея кошмаров</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-skull-crossbones" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Заброшенная палата №6
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-eye" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Коридор с тенями
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-door-closed" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Комната процедур
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-ghost" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Призраки прошлого
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-dna" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Лаборатория доктора М.
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-brain" style="font-size: 3.5rem; margin-bottom: 20px; display: block; color: #a00;"></i>
+                        Галлюцинации AFK
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="release-info">
+            <div class="telegram-channel">
+                <a href="https://t.me/legend_of_afk" target="_blank">
+                    <i class="fab fa-telegram telegram-icon"></i>
+                    <div>
+                        <h3>Наш Telegram-канал</h3>
+                        <p>Следите за новостями разработки</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="release-date">
+                <h3>Примерная дата релиза</h3>
+                <div class="date">Осень 2024</div>
+                <p>Готовьтесь к встрече со своими страхами</p>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <p>© 2024 Legend of AFK. Все права на кошмары защищены.</p>
+            <p>Игра не рекомендуется для людей со слабым сердцем и психикой.</p>
+        </footer>
+    </div>
+    
+    <div class="static-effect"></div>
+    
+    <script>
+        // Добавляем эффект случайного мерцания для большей атмосферности
+        document.addEventListener('DOMContentLoaded', function() {
+            // Эффект случайных вспышек
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    document.body.style.animation = 'none';
+                    setTimeout(() => {
+                        document.body.style.animation = 'flicker 0.3s infinite';
+                    }, 100);
+                }
+            }, 3000);
+            
+            // Эффект кровоподтеков на фоне
+            const bloodDrips = document.querySelectorAll('.drip');
+            bloodDrips.forEach(drip => {
+                // Случайная начальная задержка для каждого подтека
+                drip.style.animationDelay = Math.random() * 5 + 's';
+            });
+            
+            // Эффект глаз, которые появляются и следят за курсором
+            const createEyes = () => {
+                const eyeCount = 5;
+                for (let i = 0; i < eyeCount; i++) {
+                    const eye = document.createElement('div');
+                    eye.classList.add('eye');
+                    eye.style.left = Math.random() * 100 + 'vw';
+                    eye.style.top = Math.random() * 100 + 'vh';
+                    document.body.appendChild(eye);
+                    
+                    // Случайное появление и исчезновение глаз
+                    setInterval(() => {
+                        if (Math.random() > 0.7) {
+                            eye.style.opacity = '0.7';
+                            eye.style.animation = 'blink 2s infinite';
+                            
+                            setTimeout(() => {
+                                eye.style.opacity = '0';
+                                eye.style.animation = 'none';
+                            }, 3000);
+                        }
+                    }, 5000 + Math.random() * 10000);
+                }
+            };
+            
+            createEyes();
+            
+            // Эффект случайных звуков (имитация)
+            const playRandomSound = () => {
+                if (Math.random() > 0.9) {
+                    // В реальном проекте здесь было бы воспроизведение звука
+                    console.log("[Звук] Шорох, шаги или шепот...");
+                    
+                    // Визуальная обратная связь
+                    const container = document.querySelector('.container');
+                    container.style.transform = 'scale(1.005)';
+                    setTimeout(() => {
+                        container.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            };
+            
+            setInterval(playRandomSound, 8000);
+            
+            // Эффект печатания для описания
+            const description = document.querySelector('.description');
+            const originalText = description.textContent;
+            description.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalText.length) {
+                    description.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 20);
+                }
+            }
+            
+            // Запускаем эффект печатания после задержки
+            setTimeout(typeWriter, 4500);
+            
+            // Эффект паранойи - случайные элементы двигаются
+            document.addEventListener('mousemove', function(e) {
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                galleryItems.forEach(item => {
+                    const rect = item.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Если курсор рядом с элементом
+                    if (x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
+                        const moveX = (x - rect.width/2) / 50;
+                        const moveY = (y - rect.height/2) / 50;
+                        item.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+                    } else {
+                        item.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
