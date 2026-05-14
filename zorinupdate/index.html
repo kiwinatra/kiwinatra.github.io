@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zorin OS — Updates</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #ffffff;
+            color: #1a1f2e;
+            line-height: 1.4;
+        }
+
+        /* splash screen */
+        .splash {
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .splash.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #0066cc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* основной контент */
+        .main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .main.visible {
+            opacity: 1;
+        }
+
+        /* навигация */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #eef2f6;
+            margin-bottom: 3rem;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0066cc;
+            letter-spacing: -0.3px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links button {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 0.25rem 0;
+            transition: color 0.2s;
+        }
+        .nav-links button:hover {
+            color: #0066cc;
+        }
+
+        /* hero */
+        .hero {
+            text-align: center;
+            max-width: 720px;
+            margin: 2rem auto 2rem;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e293b, #0066cc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        /* полосочка-разделитель */
+        .divider {
+            width: 70px;
+            height: 3px;
+            background: #0066cc;
+            border-radius: 2px;
+            margin: 1.5rem auto 2rem;
+        }
+
+        /* поиск */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 1px solid #cbd5e1;
+            border-radius: 2rem;
+            background: #ffffff;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0,102,204,0.1);
+        }
+        .no-results {
+            text-align: center;
+            color: #64748b;
+            padding: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* сетка карточек */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            border: 1px solid #eef2f6;
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+        }
+        .card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        .card-version {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: #eef2ff;
+            color: #0066cc;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.5;
+            margin: 0.75rem 0 1.25rem;
+            flex-grow: 1;
+        }
+        .watch-link {
+            background: #0066cc;
+            display: inline-block;
+            width: fit-content;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.2s;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .watch-link:hover {
+            background: #0052a3;
+        }
+
+        /* footer */
+        footer {
+            background: #f8fafc;
+            border-top: 1px solid #eef2f6;
+            margin-top: 3rem;
+            padding: 2.5rem 2rem 1.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .footer-col h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .footer-col a {
+            display: block;
+            font-size: 0.85rem;
+            color: #475569;
+            text-decoration: none;
+            margin-bottom: 0.6rem;
+            transition: color 0.2s;
+        }
+        .footer-col a:hover {
+            color: #0066cc;
+        }
+        .copyright {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            padding-top: 2rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 680px) {
+            .main { padding: 0 1.2rem; }
+            .hero h1 { font-size: 2rem; }
+            .nav { flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="splash" class="splash">
+    <div class="loader"></div>
+</div>
+
+<div id="mainContent" class="main">
+    <div class="nav">
+        <div class="logo">Zorin OS</div>
+        <div class="nav-links">
+            <button id="navHome">Главная</button>
+            <button id="navUpdates">Обновления</button>
+        </div>
+    </div>
+
+    <div id="homeSection">
+        <div class="hero">
+            <h1>Zorin OS Updates</h1>
+            <p>Следите за последними релизами и улучшениями вашей системы</p>
+        </div>
+        <div class="divider"></div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Фильтр по названию или описанию...">
+        </div>
+        <div id="cardsGrid" class="cards-grid"></div>
+        <div id="noResults" class="no-results" style="display: none;">Ничего не найдено</div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>ОСНОВНЫЕ РЕСУРСЫ</h4>
+                <a href="https://zorin.com/" target="_blank" rel="noopener">Официальный сайт</a>
+                <a href="https://blog.zorin.com/" target="_blank" rel="noopener">Блог Zorin OS</a>
+                <a href="https://zorin.com/os/download/" target="_blank" rel="noopener">Скачать Zorin OS</a>
+                <a href="https://forum.zorin.com/" target="_blank" rel="noopener">Форум сообщества</a>
+                <a href="https://help.zorin.com/" target="_blank" rel="noopener">Документация / Help</a>
+                <a href="https://zorin.com/computers/" target="_blank" rel="noopener">Компьютеры с Zorin OS</a>
+                <a href="https://github.com/ZorinOS" target="_blank" rel="noopener">GitHub</a>
+            </div>
+            <div class="footer-col">
+                <h4>СОЦСЕТИ И ЧАТЫ</h4>
+                <a href="https://www.reddit.com/r/zorinos/" target="_blank" rel="noopener">Reddit</a>
+                <a href="https://www.x.com/ZorinOS" target="_blank" rel="noopener">X (Twitter)</a>
+                <a href="https://www.facebook.com/zorinos/" target="_blank" rel="noopener">Facebook</a>
+                <a href="https://www.instagram.com/zorinos/" target="_blank" rel="noopener">Instagram</a>
+                <a href="https://www.youtube.com/@ZorinOS" target="_blank" rel="noopener">YouTube</a>
+                <a href="https://t.me/zorinosgroup" target="_blank" rel="noopener">Telegram</a>
+                <a href="https://matrix.to/#/#zorin-os:matrix.org" target="_blank" rel="noopener">Matrix</a>
+            </div>
+            <div class="footer-col">
+                <h4>О ПРОЕКТЕ</h4>
+                <a href="https://zorin.com/about/" target="_blank" rel="noopener">О компании</a>
+                <a href="https://zorin.com/os/pro/" target="_blank" rel="noopener">Zorin OS Pro</a>
+                <a href="https://zorin.com/os/why-pay/" target="_blank" rel="noopener">Почему платить?</a>
+                <a href="https://zorin.com/press/" target="_blank" rel="noopener">Пресса / Media Kit</a>
+                <a href="https://zorin.com/contact/" target="_blank" rel="noopener">Связаться</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2008–2026 Zorin OS. Все права защищены.
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Данные обновлений: каждая карточка содержит ссылку на отдельный HTML-файл, который вы создадите
+    const updates = [
+        {
+            id: "zorin17-531",
+            title: "Zorin OS 18.531",
+            version: "Небольшое обновление",
+            shortDesc: "Обновили много чего"",
+            link: "/updates/17531-ru.html"
+        },
+        {
+            id: "Zorin update 17.531",
+            title: "Zorin OS Updated 17.531",
+            version: "Little Update",
+            shortDesc: "A lot of, read in",
+            link: "/updates/17531.html"
+        },
+        {
+            id: "rsmission",
+            title: "Rust Mission",
+            version: "Code",
+            shortDesc: "Your Rust Mission",
+            link: "updates/rust-mission.html"
+        },
+        {
+            id: "zorin-uptd",
+            title: "Zorin AutoUpdated",
+            version: "updates",
+            shortDesc: "Zorin now updates by itself!",
+            link: "updates/autoupdate.html"
+        }
+        
+    ];
+
+    const cardsGrid = document.getElementById('cardsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const noResultsDiv = document.getElementById('noResults');
+    const navHome = document.getElementById('navHome');
+    const navUpdates = document.getElementById('navUpdates');
+    const homeSection = document.getElementById('homeSection');
+
+    function renderCards(filter = "") {
+        const filtered = updates.filter(u =>
+            u.title.toLowerCase().includes(filter.toLowerCase()) ||
+            u.shortDesc.toLowerCase().includes(filter.toLowerCase())
+        );
+
+        if (filtered.length === 0) {
+            cardsGrid.innerHTML = '';
+            noResultsDiv.style.display = 'block';
+            return;
+        }
+
+        noResultsDiv.style.display = 'none';
+        cardsGrid.innerHTML = filtered.map(update => `
+            <div class="card">
+                <h2>${escapeHtml(update.title)}</h2>
+                <div class="card-version">${escapeHtml(update.version)}</div>
+                <p>${escapeHtml(update.shortDesc)}</p>
+                <a href="${update.link}" class="watch-link">Смотреть →</a>
+            </div>
+        `).join('');
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Поиск
+    searchInput.addEventListener('input', (e) => {
+        renderCards(e.target.value);
+    });
+
+    // Навигация
+    navHome.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    navUpdates.addEventListener('click', () => {
+        document.querySelector('.cards-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Экран загрузки
+    setTimeout(() => {
+        const splash = document.getElementById('splash');
+        splash.classList.add('hide');
+        const main = document.getElementById('mainContent');
+        main.classList.add('visible');
+    }, 700);
+
+    // Инициализация
+    renderCards();
+</script>
+</body>
+</html>
