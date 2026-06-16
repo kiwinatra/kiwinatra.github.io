@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Card Maker · TikTok</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 10px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app {
+            max-width: 420px;
+            width: 100%;
+            background: #111118;
+            border-radius: 24px;
+            padding: 16px;
+            border: 1px solid #222233;
+        }
+
+        .header {
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1e1e2e;
+        }
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e8e8f0;
+        }
+        .header span {
+            font-size: 0.75rem;
+            color: #666699;
+        }
+
+        /* upload */
+        .upload-box {
+            background: #0e0e18;
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 14px;
+            border: 1px solid #1e1e30;
+        }
+
+        .preview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            min-height: 60px;
+        }
+        .preview img {
+            max-width: 100%;
+            max-height: 160px;
+            border-radius: 16px;
+            object-fit: cover;
+            background: #08080e;
+        }
+        .preview .empty {
+            width: 100%;
+            padding: 24px;
+            text-align: center;
+            color: #555577;
+            font-size: 0.85rem;
+            background: #08080e;
+            border-radius: 16px;
+            border: 1px dashed #2a2a40;
+        }
+
+        .upload-btn {
+            background: #1a1a2e;
+            border: none;
+            padding: 10px 0;
+            border-radius: 40px;
+            color: #c8c8e8;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.15s;
+        }
+        .upload-btn:active { background: #2a2a48; }
+        input[type="file"] { display: none; }
+
+        /* text */
+        .input-group {
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            color: #8888bb;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .input-group textarea {
+            width: 100%;
+            background: #0a0a14;
+            border: 1px solid #1e1e30;
+            border-radius: 16px;
+            padding: 12px 14px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: #e0e0f0;
+            resize: vertical;
+            outline: none;
+            transition: 0.15s;
+            min-height: 70px;
+        }
+        .input-group textarea:focus {
+            border-color: #5555aa;
+            box-shadow: 0 0 0 2px rgba(85, 85, 170, 0.15);
+        }
+
+        /* settings row */
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            background: #0e0e18;
+            border-radius: 18px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border: 1px solid #1e1e30;
+            align-items: center;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1 1 auto;
+        }
+        .setting-item label {
+            color: #8888bb;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .setting-item input[type="color"] {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #2a2a44;
+            border-radius: 10px;
+            background: transparent;
+            padding: 2px;
+            cursor: pointer;
+        }
+        .setting-item input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .setting-item input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+
+        .setting-item input[type="text"] {
+            background: #0a0a14;
+            border: 1px solid #1e1e30;
+            border-radius: 30px;
+            padding: 4px 12px;
+            color: #d0d0e8;
+            font-size: 0.75rem;
+            width: 80px;
+            outline: none;
+        }
+        .setting-item input[type="text"]:focus {
+            border-color: #5555aa;
+        }
+
+        .setting-item input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: #6666bb;
+            cursor: pointer;
+        }
+
+        /* generate */
+        .gen-btn {
+            background: #5555bb;
+            border: none;
+            width: 100%;
+            padding: 13px 0;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-bottom: 16px;
+        }
+        .gen-btn:active { background: #4444aa; transform: scale(0.97); }
+
+        /* result */
+        .result {
+            background: #0a0a12;
+            border-radius: 18px;
+            padding: 14px;
+            border: 1px solid #1a1a2e;
+            display: none;
+        }
+        .result-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .result-head span {
+            color: #8888bb;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .dl-btn {
+            background: #1a1a2e;
+            border: none;
+            padding: 5px 16px;
+            border-radius: 30px;
+            color: #c8c8e8;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .dl-btn:active { background: #2a2a48; }
+
+        .canvas-wrap {
+            display: flex;
+            justify-content: center;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #00000030;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .info {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #444466;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #161628;
+        }
+
+        @media (max-width: 400px) {
+            .app { padding: 12px; }
+            .settings { gap: 8px; }
+            .setting-item input[type="text"] { width: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <div class="header">
+        <h1>Card Maker</h1>
+        <span>9:16 · photo + text · watermark</span>
+    </div>
+
+    <!-- photo -->
+    <div class="upload-box">
+        <div class="preview" id="previewArea">
+            <div class="empty">No photo · optional</div>
+        </div>
+        <input type="file" id="photoInput" accept="image/*">
+        <button class="upload-btn" id="uploadBtn">+ Upload photo</button>
+    </div>
+
+    <!-- text -->
+    <div class="input-group">
+        <label>Text</label>
+        <textarea id="textInput" rows="2" placeholder="Your text here">MOMENT</textarea>
+    </div>
+
+    <!-- settings -->
+    <div class="settings">
+        <div class="setting-item">
+            <label>Color</label>
+            <input type="color" id="gradientColor" value="#29b66d">
+        </div>
+        <div class="setting-item">
+            <label>Watermark</label>
+            <input type="checkbox" id="watermarkToggle" checked>
+        </div>
+        <div class="setting-item">
+            <input type="text" id="watermarkText" value="© maker" maxlength="20">
+        </div>
+    </div>
+
+    <button class="gen-btn" id="generateBtn">Generate card</button>
+
+    <!-- result -->
+    <div class="result" id="resultArea">
+        <div class="result-head">
+            <span>Result (PNG)</span>
+            <button class="dl-btn" id="downloadBtn">Download</button>
+        </div>
+        <div class="canvas-wrap">
+            <canvas id="cardCanvas" width="540" height="960"></canvas>
+        </div>
+        <div class="info">tap card to regenerate · 540×960</div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const photoInput = document.getElementById('photoInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const previewArea = document.getElementById('previewArea');
+        const textInput = document.getElementById('textInput');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultArea = document.getElementById('resultArea');
+        const canvas = document.getElementById('cardCanvas');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const gradientColor = document.getElementById('gradientColor');
+        const watermarkToggle = document.getElementById('watermarkToggle');
+        const watermarkText = document.getElementById('watermarkText');
+
+        let loadedImage = null;
+        let loadedImageURL = null;
+
+        // preview
+        function setPreview(img) {
+            previewArea.innerHTML = '';
+            if (img) {
+                const wrap = document.createElement('div');
+                wrap.style.width = '100%';
+                wrap.style.textAlign = 'center';
+                const el = document.createElement('img');
+                el.src = img.src;
+                el.style.maxHeight = '160px';
+                el.style.width = 'auto';
+                el.style.borderRadius = '16px';
+                wrap.appendChild(el);
+                previewArea.appendChild(wrap);
+            } else {
+                const empty = document.createElement('div');
+                empty.className = 'empty';
+                empty.textContent = 'No photo · optional';
+                previewArea.appendChild(empty);
+            }
+        }
+
+        function revokeURL() {
+            if (loadedImageURL) {
+                URL.revokeObjectURL(loadedImageURL);
+                loadedImageURL = null;
+            }
+        }
+
+        function handleFile(file) {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+            revokeURL();
+            const url = URL.createObjectURL(file);
+            loadedImageURL = url;
+            const img = new Image();
+            img.onload = function() {
+                loadedImage = img;
+                setPreview(img);
+                if (resultArea.style.display === 'block') resultArea.style.display = 'none';
+            };
+            img.onerror = function() {
+                alert('Failed to load image');
+                revokeURL();
+                loadedImage = null;
+                setPreview(null);
+            };
+            img.src = url;
+        }
+
+        uploadBtn.addEventListener('click', () => photoInput.click());
+        photoInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+        });
+
+        // ---- render ----
+        function renderCard() {
+            const W = 540, H = 960;
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            // background: black + gradient from bottom
+            const color = gradientColor.value;
+            const grad = ctx.createLinearGradient(0, H * 0.45, 0, H);
+            grad.addColorStop(0, '#000000');
+            grad.addColorStop(0.3, '#08080e');
+            grad.addColorStop(0.55, color);
+            grad.addColorStop(1, color);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // subtle dots
+            ctx.fillStyle = '#ffffff08';
+            for (let i = 0; i < 100; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random() * W, Math.random() * H, Math.random() * 1.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // ---- photo ----
+            let photoY = H - 60;
+            let photoW = 0, photoH = 0, photoX = 0;
+            const bottomPad = 40;
+            const maxPH = H * 0.44;
+            const maxPW = W - 40;
+
+            if (loadedImage) {
+                const iw = loadedImage.naturalWidth;
+                const ih = loadedImage.naturalHeight;
+                let ratio = iw / ih;
+                let tw = maxPW;
+                let th = tw / ratio;
+                if (th > maxPH) {
+                    th = maxPH;
+                    tw = th * ratio;
+                }
+                photoW = tw;
+                photoH = th;
+                photoX = (W - tw) / 2;
+                photoY = H - th - bottomPad;
+
+                ctx.save();
+                const r = 22;
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.beginPath();
+                ctx.moveTo(photoX + r, photoY);
+                ctx.lineTo(photoX + photoW - r, photoY);
+                ctx.quadraticCurveTo(photoX + photoW, photoY, photoX + photoW, photoY + r);
+                ctx.lineTo(photoX + photoW, photoY + photoH - r);
+                ctx.quadraticCurveTo(photoX + photoW, photoY + photoH, photoX + photoW - r, photoY + photoH);
+                ctx.lineTo(photoX + r, photoY + photoH);
+                ctx.quadraticCurveTo(photoX, photoY + photoH, photoX, photoY + photoH - r);
+                ctx.lineTo(photoX, photoY + r);
+                ctx.quadraticCurveTo(photoX, photoY, photoX + r, photoY);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(loadedImage, photoX, photoY, photoW, photoH);
+                ctx.restore();
+
+                ctx.save();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(photoX + r, photoY);
+                ctx.lineTo(photoX + photoW - r, photoY);
+                ctx.quadraticCurveTo(photoX + photoW, photoY, photoX + photoW, photoY + r);
+                ctx.lineTo(photoX + photoW, photoY + photoH - r);
+                ctx.quadraticCurveTo(photoX + photoW, photoY + photoH, photoX + photoW - r, photoY + photoH);
+                ctx.lineTo(photoX + r, photoY + photoH);
+                ctx.quadraticCurveTo(photoX, photoY + photoH, photoX, photoY + photoH - r);
+                ctx.lineTo(photoX, photoY + r);
+                ctx.quadraticCurveTo(photoX, photoY, photoX + r, photoY);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // ---- text ----
+            const raw = textInput.value.trim() || 'YOUR TEXT';
+            let lines = raw.split(/\r?\n/).filter(l => l.trim() !== '');
+            if (lines.length === 0) lines = ['YOUR TEXT'];
+
+            let maxTextY = (loadedImage && photoY) ? photoY - 35 : H - 100;
+            let startY = 90;
+            let availH = maxTextY - startY;
+            if (availH < 80) availH = 300;
+
+            let fontSize = 46;
+            let lineH = fontSize * 1.2;
+            let totalH = lines.length * lineH;
+
+            while (totalH > availH * 0.8 && fontSize > 24) {
+                fontSize -= 2;
+                lineH = fontSize * 1.2;
+                totalH = lines.length * lineH;
+            }
+            if (totalH > availH * 0.8) {
+                lineH = fontSize * 1.05;
+                totalH = lines.length * lineH;
+            }
+
+            let textStartY = startY + (availH - totalH) / 2;
+            if (textStartY < 50) textStartY = 60;
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const yPos = textStartY + i * lineH;
+                if (yPos > maxTextY - 16) break;
+
+                ctx.shadowColor = 'rgba(0,0,0,0.7)';
+                ctx.shadowBlur = 14;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+
+                ctx.font = `700 ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+                const tw = ctx.measureText(line).width;
+
+                // background pill for readability
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 0.2;
+                ctx.fillStyle = '#000000';
+                const padX = 14, padY = 8;
+                const rx = W/2 - tw/2 - padX;
+                const ry = yPos - padY;
+                ctx.beginPath();
+                ctx.roundRect(rx, ry, tw + padX*2, fontSize + padY*2, 12);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                // main text
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.fillText(line, W/2, yPos);
+
+                // subtle outline
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+                ctx.lineWidth = 1;
+                ctx.strokeText(line, W/2, yPos);
+            }
+
+            // ---- watermark ----
+            if (watermarkToggle.checked) {
+                let wm = watermarkText.value.trim() || '©';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'bottom';
+                ctx.font = '500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.fillText(wm, W - 20, H - 18);
+
+                ctx.textAlign = 'left';
+                ctx.font = '400 11px monospace';
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.fillText('✦', 18, H - 18);
+            }
+
+            // border
+            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(10, 10, W-20, H-20);
+        }
+
+        // roundRect polyfill
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+                if (r > w/2) r = w/2;
+                if (r > h/2) r = h/2;
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                return this;
+            };
+        }
+
+        function generate() {
+            renderCard();
+            resultArea.style.display = 'block';
+        }
+
+        generateBtn.addEventListener('click', generate);
+
+        // tap canvas to regenerate
+        canvas.addEventListener('click', generate);
+
+        downloadBtn.addEventListener('click', function() {
+            if (resultArea.style.display !== 'block') {
+                alert('Generate a card first');
+                return;
+            }
+            try {
+                const link = document.createElement('a');
+                link.download = 'card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch(e) {
+                alert('Download failed');
+            }
+        });
+
+        // auto-generate on load
+        setTimeout(generate, 200);
+    })();
+</script>
+</body>
+</html>
